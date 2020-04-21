@@ -2,17 +2,27 @@
 
 const mtg = require('mtgsdk');
 
-const lotus = async () => {
+
+const lotus = async (req, res) => {
     try {
-        res.json(
-            await mtg.card.find(3) // "Black Lotus"
-        )
+        const card = await mtg.card.find(3)
+            .then(result => {
+                return result.card.imageUrl
+            });
+        res.json(card)
     }
     catch(e){
-        console.error(e)
+        console.error('controller error', e)
     }
 };
 
+
+/*
+const lotus = mtg.card.find(3)
+    .then(result => {
+        return result.card.imageUrl // "Black Lotus"
+    });
+*/
 
 module.exports = {
     lotus,
