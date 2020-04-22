@@ -1,3 +1,4 @@
+'use strict';
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -5,7 +6,7 @@ const Schema = mongoose.Schema;
 const deckSchema = new Schema({
     Name: String,
     cards: {
-            card: [Number],
+            card: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
             required: true,
     }
 });
