@@ -5,17 +5,19 @@
     const search = document.getElementById('search');
     const ul = document.querySelector('ul');
     const form = document.querySelector('form');
+    const loader = document.getElementById('loader-wrapper');
 
     const fetchCard = async (search) => {
         try {
+            loader.classList.toggle('fadeIn');
             const response = await fetch(apiURL + '?name=' + JSON.stringify(search));
             console.log(response);
             const json = await response.json();
             console.log(json);
             for( let i = 0; i < json.length; i++) {
-                ul.innerHTML += `<li><img src=${json[i]}></li>`;
+                ul.innerHTML += `<li><p>${json[i].name}</p><img src=${json[i].URL}></li>`;
             }
-
+            loader.classList.toggle('fadeOut');
 
         } catch (e) {
             console.error('test ', e);

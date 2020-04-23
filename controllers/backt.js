@@ -28,12 +28,16 @@ const lotus = async (req, res) => {
 
         const cards = (list) =>{
             const entries = [];
+            const dupecheck = [];
             const le = list.length;
 
             for(let i = 0; i < le; i++){
-                entries.push(list[i].imageUrl)
+                if(dupecheck.includes(list[i].name) === false && list[i].imageUrl !== undefined) {
+                    dupecheck.push(list[i].name);
+                    entries.push({name: list[i].name, URL: list[i].imageUrl})
+                }
             }
-
+            console.log(dupecheck);
             return entries
         };
 
