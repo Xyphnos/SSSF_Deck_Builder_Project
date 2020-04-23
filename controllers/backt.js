@@ -3,7 +3,7 @@
 const mtg = require('mtgsdk');
 
 
-const lotus = async (req, res) => {
+const cardSearch = async (req, res) => {
     try {
         const query = req.query;
         let name = query.name;
@@ -14,7 +14,6 @@ const lotus = async (req, res) => {
         if(id !==  undefined) {
             id = JSON.parse(id);
         }
-
 
         /*
         const card = await mtg.card.find(id)
@@ -48,6 +47,9 @@ const lotus = async (req, res) => {
     }
 };
 
+
+
+
 module.exports = {
-    lotus,
+    cardSearch,
 };

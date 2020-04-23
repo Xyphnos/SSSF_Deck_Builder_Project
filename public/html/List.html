@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
-<ul id="card list">
-
-</ul>
+<body class="fullscreen">
+<div class="container">
+    <form>
+        <input type="text" id="input" placeholder="Search for a card">
+        <button id="search" type="submit">Send</button>
+    </form>
+    <div class="test">
+        <div id="loader-wrapper">
+                <span class="loader">
+                </span>
+            <p id="fetchPrompt">fetching cards</p>
+        </div>
+        <ul>
+        </ul>
+    </div>
+</div>
+<script src="../js/test.js"></script>
 </body>
 </html>

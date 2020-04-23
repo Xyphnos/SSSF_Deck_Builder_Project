@@ -15,16 +15,16 @@ const user_post = async (req, res) => {
   try {
     const hash = await bcrypt.hash(req.body.password, saltRound);
     req.user = {
-      email: req.body.username,
+      email: req.body.email,
       password: hash,
-      full_name: req.body.full_name,
+      username: req.body.username,
     };
     let newUser = new userModel(req.user);
     const result = await newUser.save();
     delete result.password;
     const user = {
+      email: result.body.email,
       username: result.username,
-      full_name: result.full_name,
     };
     res.json({
       message: 'User created',
@@ -40,4 +40,5 @@ const user_post = async (req, res) => {
 module.exports = {
   user_post,
   user_get_by_username,
+  user_get_by_id,
 };

@@ -2,13 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-router.get('/', (req, res) => {
-  res.send('With this endpoint you can get users');
-});
+router.get('/', userController.user_get_by_username());
 
-router.get('/:id', (req, res) => {
-  res.send('With this endpoint you can get a user');
-});
+router.get('/:id', userController.user_get_by_id());
 
 router.post('/', userController.user_post);
 

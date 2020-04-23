@@ -4,10 +4,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const deckSchema = new Schema({
-    Name: String,
+    name: String,
     cards: {
-            card: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
-            required: true,
+        card: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
+    },
+    user: {
+        user: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+        required: true
     }
 });
 
