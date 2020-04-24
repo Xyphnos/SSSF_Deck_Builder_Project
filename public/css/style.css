@@ -24,19 +24,49 @@ html,
 .title {
     font-size: 3rem;
 }
-.test {
+.bg {
     height: 70vh;
     overflow: auto;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.9);
     padding: 1rem;
     text-align: center;
+}
+.input {
+    height: 30px;
+    width: 300px;
+    display: inline;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+#loginform {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#loginb {
+    display: inline;
+    height: 40px;
+    width: 100px;
+    background-color: #083769;
+    color: #FFffff;
+    border-radius: 10px;
+    border: 2px solid #242f3f;
+}
+
+#loginbg {
+    display: inline-block;
 }
 
 ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    display: inline-grid;
 }
+
 #loader-wrapper {
     position: absolute;
     top: 35%;
