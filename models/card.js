@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 
 const cardSchema = new Schema({
     name: {type: String, unique: true},
-    cmc: {type: String, unique: true},
-    colors: {type: String, unique: true},
-    types: {type: String, unique: true},
-    subtypes: {type: String, unique: true},
-    power: {type: String, unique: true},
-    toughness: {type: String, unique: true},
+    cmc: String,
+    colors: String,
+    types: [{type: String}],
+    subtypes: [{type: String}],
+    power: String,
+    toughness: String,
     imageUrl: {type: String, unique: true},
     id: {type: String, unique: true},
 
