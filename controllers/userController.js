@@ -28,7 +28,7 @@ const user_post = async (req, res) => {
     };
     res.json({
       message: 'User created',
-      user,
+      user
     });
   }
   catch (e) {

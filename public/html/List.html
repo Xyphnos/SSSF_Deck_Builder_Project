@@ -5,10 +5,18 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="fullscreen">
+<div id="banner">
+    <form action="login.html" id="loginF">
+        <button class="PB" id="logb" type="submit" onclick="window.location.href = 'login.html';">Login</button>
+    </form>
+    <form action="index.html">
+        <button class="PB" type="submit" onclick="window.location.href = 'index.html';">Home</button>
+    </form>
+</div>
 <div class="container">
-    <form>
+    <form id="searchForm">
         <input type="text" id="input" placeholder="Search for a card">
-        <button id="search" type="submit">Send</button>
+        <button id="search" type="submit">Search</button>
     </form>
     <div class="bg">
         <div id="loader-wrapper">

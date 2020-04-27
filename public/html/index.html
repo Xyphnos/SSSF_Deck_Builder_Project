@@ -5,8 +5,16 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="fullscreen">
+<div id="banner">
+    <form action="login.html" id="loginF">
+        <button class="PB" id="logb" type="submit" onclick="window.location.href = 'login.html';">Login</button>
+    </form>
+    <form action="list.html">
+        <button class="PB" type="submit" onclick="window.location.href = 'list.html';">Card Search</button>
+    </form>
+</div>
     <div class="container">
-        <form>
+        <form id="searchForm">
             <button id="search" type="submit">Send</button>
         </form>
         <div class="test">

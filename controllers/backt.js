@@ -4,10 +4,13 @@ const mtg = require('mtgsdk');
 
 
 const cardSearch = async (req, res) => {
+
     try {
+
         const query = req.query;
         let name = query.name;
         let id = query.id;
+
         if(name !==  undefined) {
             name = JSON.parse(name);
         }
@@ -42,7 +45,7 @@ const cardSearch = async (req, res) => {
 
         res.json(cards(card))
     }
-    catch(e){
+    catch (e) {
         console.error('controller error', e)
     }
 };
@@ -51,5 +54,5 @@ const cardSearch = async (req, res) => {
 
 
 module.exports = {
-    cardSearch,
+    cardSearch
 };
