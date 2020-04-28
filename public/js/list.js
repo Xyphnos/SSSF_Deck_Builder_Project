@@ -3,26 +3,10 @@
     const apiURL = 'http://localhost:3000/cardSearch';
     const input = document.getElementById('input');
     const search = document.getElementById('search');
-    const ul = document.querySelector('ul');
+    const ul = document.getElementById('cardL');
     const form = document.getElementById('searchForm');
     const loader = document.getElementById('loader-wrapper');
-    const token = localStorage.getItem('token');
-    const logb = document.getElementById('logb');
-    const logf = document.getElementById('loginF');
 
-
-    const checkT = () =>{
-        if(token !== null){
-            logf.action = "profile.html";
-            logb.innerText = "Profile";
-            logb.onclick = "window.location.href = 'profile.html';";
-        }
-    };
-
-    window.addEventListener('load', async (event) =>{
-        console.log(token);
-        checkT()
-    });
 
     const fetchCard = async (search) => {
         try {

@@ -6,10 +6,13 @@
 </head>
 <body class="fullscreen">
 <div id="banner">
+    <form action="index.html">
+        <button class="PB" type="submit" onclick="window.location.href = 'index.html';">Home</button>
+    </form>
     <form action="login.html" id="loginF">
         <button class="PB" id="logb" type="submit" onclick="window.location.href = 'login.html';">Login</button>
     </form>
-    <form action="list.html">
+    <form action="List.html">
         <button class="PB" type="submit" onclick="window.location.href = 'list.html';">Card Search</button>
     </form>
 </div>
@@ -17,16 +20,16 @@
         <form id="searchForm">
             <button id="search" type="submit">Send</button>
         </form>
-        <div class="test">
+        <div class="bg">
             <div id="loader-wrapper">
                 <span class="loader">
                 </span>
-                <p id="fetchPrompt">fetching cards</p>
+                <p id="fetchPrompt">fetching decks</p>
             </div>
-            <ul>
+            <ul id="decklist">
             </ul>
         </div>
     </div>
-    <script src="../js/test.js"></script>
+    <script src="../js/banner.js"></script>
 </body>
 </html>

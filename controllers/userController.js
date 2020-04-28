@@ -3,11 +3,11 @@ const saltRound = 12;
 const userModel = require('../models/user');
 
 const user_get_by_username = async (username) => {
-  return await userModel.findOne({username});
+  return await userModel.findOne({username: username});
 };
 
-const user_get_by_id = async (username) => {
-  return await userModel.findOne({id});
+const user_get_by_id = async (id) => {
+  return await userModel.findOne({id: id});
 };
 
 const user_post = async (req, res) => {

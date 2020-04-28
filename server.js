@@ -12,6 +12,7 @@ const searchRoute = require('./routes/searchRoute');
 const passport = require('./utils/pass');
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
+const deckRoute = require('./routes/deckRoute');
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/cardSearch', searchRoute);
+app.use('/decks', deckRoute);
 app.use('/user', userRoute);
 app.use('/auth', authRoute);
 

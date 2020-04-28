@@ -12,23 +12,42 @@ const deckGet = async (req, res) => {
         console.error('deckGet', e);
     }
 };
+const decks = async (list) =>{
+    const entries = [];
+    const le = list.length;
+
+    for(let i = 0; i < le; i++){
+        let en = list[i];
+        let d = await deckModel.findOne({_id: en});
+        entries.push(d);
+    }
+    return entries
+};
+
 const deckGetAll = async (req, res) => {
     try {
-        const decks = await userModel.findById(req.query.id);
-        res.json(decks);
+        const name = req.query.user;
+        const user = await userModel.findOne({username: name});
+        const ud = user.decks;
+        const asd = await decks(ud);
+
+        res.json(asd);
     } catch (e) {
         console.error('deckGetAll', e);
     }
 };
 const deckAdd = async (req, res) => {
     try {
+        const name = req.query.user;
         const post = await deckModel.create({
             name: req.query.name,
-            user: req.query.user
+            user: name
         });
-        res.send(`Station created with id: ${post._id}.`);
+        const user = {username: name};
+        const deckU = await userModel.findOneAndUpdate(user, {decks: post._id});
+        res.send(`Deck created with id: ${post._id}.`);
     } catch(e){
-        console.error('station_post', e);
+        console.error('deckAdd', e);
     }
 };
 const deckDelete = async (req, res) => {
