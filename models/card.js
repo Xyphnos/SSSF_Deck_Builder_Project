@@ -6,13 +6,13 @@ const Schema = mongoose.Schema;
 const cardSchema = new Schema({
     name: {type: String, unique: true},
     cmc: String,
-    colors: String,
+    colors: [{type: String}],
     types: [{type: String}],
     subtypes: [{type: String}],
     power: String,
     toughness: String,
     imageUrl: {type: String, unique: true},
-    id: {type: String, unique: true},
+    cid: {type: String, unique: true},
 
 });
 

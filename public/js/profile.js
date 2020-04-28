@@ -2,6 +2,7 @@
 
 const apiURL = 'http://localhost:3000/decks';
 const nform = document.getElementById('newDeck');
+const bar = document.getElementById('create');
 const ul = document.getElementById('decklist');
 
 
@@ -60,6 +61,6 @@ const createNew = async (dname, username) => {
 
 nform.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const deckName = 'asd';
+    const deckName = create.value;
     createNew(deckName, username)
 });

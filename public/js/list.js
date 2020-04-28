@@ -26,6 +26,7 @@
         }
     };
 
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         ul.innerHTML = '';

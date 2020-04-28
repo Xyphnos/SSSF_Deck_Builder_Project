@@ -26,12 +26,17 @@ const decks = async (list) =>{
 
 const deckGetAll = async (req, res) => {
     try {
-        const name = req.query.user;
-        const user = await userModel.findOne({username: name});
-        const ud = user.decks;
-        const asd = await decks(ud);
-
-        res.json(asd);
+        const name = await req.query.user;
+        if(name === undefined) {
+            const model = await deckModel.find();
+            res.json(model);
+        }
+        else{
+            const user = await userModel.findOne({username: name});
+            const ud = user.decks;
+            const asd = await decks(ud);
+            res.json(asd);
+        }
     } catch (e) {
         console.error('deckGetAll', e);
     }
@@ -39,6 +44,7 @@ const deckGetAll = async (req, res) => {
 const deckAdd = async (req, res) => {
     try {
         const name = req.query.user;
+
         const post = await deckModel.create({
             name: req.query.name,
             user: name
