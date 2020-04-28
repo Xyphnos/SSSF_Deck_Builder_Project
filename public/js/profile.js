@@ -1,10 +1,52 @@
 'use strict';
 
 const apiURL = 'http://localhost:3000/decks';
+const apiURLu = 'http://localhost:3000/graphql';
 const nform = document.getElementById('newDeck');
 const bar = document.getElementById('create');
 const ul = document.getElementById('decklist');
 
+const getAll = async (username) =>{
+    try{
+        const result = await fetch(apiURL + '?user=' + `${username}`);
+        console.log(result);
+        const json = await result.json();
+        console.log('this is the getAll json', json);
+        for( let i = 0; i < json.length; i++) {
+            ul.innerHTML += `<li><p>${json[i].name}<img src=${json[i].cover}></p></li>`;
+        }
+    }catch(e){
+        console.error('getAll error ', e)
+    }
+};
+
+const checkUser = async () => {
+    const query = {
+        query: ` {
+  user 
+  {
+    id
+    username
+    decks {
+    id
+    name
+    cover
+    }
+    token
+  }
+}
+`,
+    };
+    const result = await fetchGraphql(query);
+    console.log('banner result ', result);
+    if (result.user) {
+        console.log('asdadsadasd');
+        getAll(result.user.username)
+
+    }
+};
+
+checkUser();
 
 const fetchStuff = async (URL, query) => {
     try {
@@ -26,24 +68,7 @@ const fetchStuff = async (URL, query) => {
     }
 };
 
-const getAll = async (username) =>{
-  try{
-      const result = await fetch(apiURL + '?user=asd');
-      console.log(result);
-      const json = await result.json();
-      console.log('this is the getAll json', json);
-      for( let i = 0; i < json.length; i++) {
-          ul.innerHTML += `<li><p>${json[i].name}<img src=${json[i].cover}></p></li>`;
-      }
-      loader.classList.toggle('fadeOut');
-  }catch(e){
 
-  }
-};
-window.addEventListener('load', async (event) =>{
-    const user = 'asd';
-    getAll(user);
-});
 
 const createNew = async (dname, username) => {
     console.log('asd');
@@ -54,6 +79,7 @@ const createNew = async (dname, username) => {
     try{
         const result = await fetchStuff(query);
         localStorage.setItem('token', result.token);
+        window.location.href = 'modify.html';
     }catch(e){
 
     }

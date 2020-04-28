@@ -51,15 +51,6 @@ const userType = new GraphQLObjectType({
     }),
 });
 
-const InputGeoJSONType = new GraphQLInputObjectType({
-    name: 'Location',
-    description: 'Location as array, longitude first',
-    fields: () => ({
-        type: {type: GraphQLString, defaultValue: 'Point'},
-        coordinates: {type: new GraphQLNonNull(new GraphQLList(GraphQLFloat))},
-    }),
-});
-
 const deckType = new GraphQLObjectType({
     name: 'deck',
     fields: () => ({
@@ -94,21 +85,6 @@ const RootQuery = new GraphQLObjectType({
             args: {
             },
             resolve: (parent, args) => {
-                // console.log(args);
-                if (args.bounds) { // if bounds arg is in query
-                    // console.log('bounds', args.bounds);
-                    const mapBounds = rectangleBounds(args.bounds._northEast,
-                        args.bounds._southWest);
-                    return station.find(({
-                        Location: {
-                            $geoWithin: {  // geoWithin is built in mongoose, https://mongoosejs.com/docs/geojson.html
-                                $geometry: mapBounds,
-                            },
-                        },
-                    }));
-                } else { // if no args or start or limit
-                    return station.find().skip(args.start).limit(args.limit);
-                }
             },
         },
         user: {
@@ -152,6 +128,130 @@ const RootQuery = new GraphQLObjectType({
     },
 });
 
+const Mutation = new GraphQLObjectType({
+    name: 'MutationType',
+    fields: () => ({
+        addDeck: {
+            type: deckType,
+            description: 'Add a deck and see if authentication actually works',
+            args: {
+                name: {type: new GraphQLNonNull(GraphQLString),},
+                user: {type: new GraphQLNonNull(GraphQLString)},
+            },
+            resolve: async (parent, args, {req, res}) => {
+                try {
+                    await authController.checkAuth(req, res);
+                    let newDeck = new deck({
+                        ...args
+                    });
+                    return newDeck.save();
+                }
+                catch (err) {
+                    throw new Error(err);
+                }
+            },
+        },
+        modifyStation: {
+            type: stationType,
+            description: 'Modify station, authentication required.',
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                Connections: {
+                    type: new GraphQLList(ModifyConnection),
+                },
+                Title: {type: GraphQLString},
+                AddressLine1: {type: GraphQLString},
+                Town: {type: GraphQLString},
+                StateOrProvince: {type: GraphQLString},
+                Postcode: {type: GraphQLString},
+            },
+            resolve: async (parent, args, {req, res}) => {
+                try {
+                    await authController.checkAuth(req, res);
+                    const conns = await Promise.all(args.Connections.map(async conn => {
+                        const result = await connection.findByIdAndUpdate(conn.id, conn,
+                            {new: true});
+                        return result;
+                    }));
+
+                    let newStation = {
+                        Title: args.Title,
+                        AddressLine1: args.AddressLine1,
+                        Town: args.Town,
+                        StateOrProvince: args.StateOrProvince,
+                        Postcode: args.Postcode,
+                    };
+                    return await station.findByIdAndUpdate(args.id, newStation,
+                        {new: true});
+                }
+                catch (err) {
+                    throw new Error(err);
+                }
+            },
+        },
+        deleteStation: {
+            type: stationType,
+            description: 'Delete station, authentication required.',
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+            },
+            resolve: async (parent, args, {req, res}) => {
+                try {
+                    authController.checkAuth(req, res);
+                    // delete connections
+                    const stat = await station.findById(args.id);
+                    const delResult = await Promise.all(
+                        stat.Connections.map(async (conn) => {
+                            return await connection.findByIdAndDelete(conn._id);
+                        }));
+                    console.log('delete result', delResult);
+                    const result = await station.findByIdAndDelete(args.id);
+                    console.log('delete result', result);
+                    return result;
+                }
+                catch (err) {
+                    throw new Error(err);
+                }
+            },
+        },
+        registerUser: {
+            type: userType,
+            description: 'Register user.',
+            args: {
+                username: {type: new GraphQLNonNull(GraphQLString)},
+                password: {type: new GraphQLNonNull(GraphQLString)},
+                full_name: {type: new GraphQLNonNull(GraphQLString)},
+            },
+            resolve: async (parent, args, {req, res}) => {
+                try {
+                    const hash = await bcrypt.hash(args.password, saltRound);
+                    const userWithHash = {
+                        ...args,
+                        password: hash,
+                    };
+                    const newUser = new user(userWithHash);
+                    const result = await newUser.save();
+                    if (result !== null) {
+                        // automatic login
+                        req.body = args; // inject args to request body for passport
+                        const authResponse = await authController.login(req, res);
+                        console.log('ar', authResponse);
+                        return {
+                            id: authResponse.user._id,
+                            ...authResponse.user,
+                            token: authResponse.token,
+                        };
+                    } else {
+                        throw new Error('insert fail');
+                    }
+                }
+                catch (err) {
+                    throw new Error(err);
+                }
+            },
+        },
+    }),
+});
 module.exports = new GraphQLSchema({
     query: RootQuery,
 });

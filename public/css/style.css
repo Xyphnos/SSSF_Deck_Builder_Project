@@ -17,39 +17,57 @@ html,
     text-align: center;
 }
 
-.PB{
-    display: inline;
-    height: 40px;
-    width: 100px;
-    background-color: #242f3f;
-    color: #FFffff;
-    border-radius: 10px;
-    border: 2px solid white;
-}
-
-
-#loginF{
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-}
-
-
-#banner{
-    width: 100%;
-    height: 85px;
-    background-color: #083769;
-    display: inline-block;
+.navbar {
+    list-style-type: none;
     margin-bottom: -4px;
+    margin-left: 0;
+    padding: 0;
+    width: 100%;
+    overflow: hidden;
+    background-color: #333;
+    display: inline-block;
+}
+.navRLi{
+    float: right;
+    border-left: 1px solid #bbb
 }
 
-/* Center the content in the browser window */
+.navLLi {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+.navLLi a {
+    display: block;
+    color: white;
+    height: 50px;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+.navRLi a {
+    display: block;
+    color: white;
+    height: 50px;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+/* Change the link color to #111 (black) on hover */
+.navLLi a:hover {
+    background-color: #111;
+}
+.navRLi a:hover {
+    background-color: #111;
+}/* Center the content in the browser window */
+.active {
+    background-color: rgb(8, 55, 105);
+}
+
 .container {
     padding-top: 10px;
     margin: auto;
     text-align: center;
     display: inline-block;
+    align-items: center;
 }
 
 .title {

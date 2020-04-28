@@ -1,11 +1,11 @@
 'use strict';
-const apiURL = 'http://localhost:3000/decks';
+const apiURLu = 'http://localhost:3000/decks';
 const ul = document.getElementById('decklist');
 
 
 const getEvery = async () =>{
     try{
-        const result = await fetch(apiURL);
+        const result = await fetch(apiURLu);
         console.log(result);
         const json = await result.json();
         let limit;
@@ -25,6 +25,7 @@ const getEvery = async () =>{
 
     }
 };
+
 
 window.addEventListener('load', async (event) =>{
     getEvery();

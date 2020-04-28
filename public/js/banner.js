@@ -1,9 +1,9 @@
 'use strict';
 
-const apiURLu = 'http://localhost:3000/graphql';
+const apiURL = 'http://localhost:3000/graphql';
 const token = localStorage.getItem('token');
-const logb = document.getElementById('logb');
-const logf = document.getElementById('loginF');
+const logb = document.getElementById('logB');
+const bar = document.getElementsByClassName('navbar');
 
 const fetchGraphql = async (query) => {
     const options = {
@@ -16,7 +16,7 @@ const fetchGraphql = async (query) => {
         body: JSON.stringify(query),
     };
     try {
-        const response = await fetch(apiURLu, options);
+        const response = await fetch(apiURL, options);
         const json = await response.json();
         console.log('json from banner fetch',json);
         return json.data;
@@ -48,24 +48,9 @@ const checkUser = async () => {
     console.log('banner result ', result);
     if (result.user) {
         console.log('asdadsadasd');
-        logf.action = "profile.html";
-        logb.innerText = "Profile";
-        logb.onclick = "window.location.href = 'profile.html';";
+        logb.innerText = "Logout";
+        bar.innerHTML += `<li class="navRLi"><a href="profile.js">Profile</a></li>`;
     }
 };
 
 checkUser();
-
-/*
-const checkT = () =>{
-    if(token !== null){
-        logf.action = "profile.html";
-        logb.innerText = "Profile";
-        logb.onclick = "window.location.href = 'profile.html';";
-    }
-};
-
-window.addEventListener('load', async (event) =>{
-    console.log(token);
-    checkT()
-});*/

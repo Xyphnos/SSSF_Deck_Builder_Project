@@ -1,6 +1,6 @@
     'use strict';
 
-    const apiURL = 'http://localhost:3000/cardSearch';
+    const apiURLu = 'http://localhost:3000/cardSearch';
     const input = document.getElementById('input');
     const search = document.getElementById('search');
     const ul = document.getElementById('cardL');
@@ -11,7 +11,7 @@
     const fetchCard = async (search) => {
         try {
             loader.classList.toggle('fadeIn');
-            const response = await fetch(apiURL + '?name=' + JSON.stringify(search));
+            const response = await fetch(apiURLu + '?name=' + JSON.stringify(search));
             console.log(response);
             const json = await response.json();
             console.log(json);
