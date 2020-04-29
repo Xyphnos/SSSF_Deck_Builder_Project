@@ -1,6 +1,6 @@
 'use strict';
 
-const apiURL = 'http://localhost:3000/decks';
+const apiURLi = 'http://localhost:3000/decks';
 const apiURLu = 'http://localhost:3000/graphql';
 const nform = document.getElementById('newDeck');
 const bar = document.getElementById('create');
@@ -8,7 +8,7 @@ const ul = document.getElementById('decklist');
 
 const getAll = async (username) =>{
     try{
-        const result = await fetch(apiURL + '?user=' + `${username}`);
+        const result = await fetch(apiURLi + '?user=' + `${username}`);
         console.log(result);
         const json = await result.json();
         console.log('this is the getAll json', json);
@@ -20,33 +20,6 @@ const getAll = async (username) =>{
     }
 };
 
-const checkUser = async () => {
-    const query = {
-        query: ` {
-  user 
-  {
-    id
-    username
-    decks {
-    id
-    name
-    cover
-    }
-    token
-  }
-}
-`,
-    };
-    const result = await fetchGraphql(query);
-    console.log('banner result ', result);
-    if (result.user) {
-        console.log('asdadsadasd');
-        getAll(result.user.username)
-
-    }
-};
-
-checkUser();
 
 const fetchStuff = async (URL, query) => {
     try {
@@ -77,7 +50,7 @@ const createNew = async (dname, username) => {
         user: `${username}`
     };
     try{
-        const result = await fetchStuff(query);
+        const result = await fetchStuff(apiURLi, query);
         localStorage.setItem('token', result.token);
         window.location.href = 'modify.html';
     }catch(e){

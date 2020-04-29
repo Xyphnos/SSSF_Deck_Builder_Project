@@ -67,6 +67,23 @@ const deckType = new GraphQLObjectType({
     }),
 });
 
+const modifyCards = new GraphQLInputObjectType({
+    name: 'modifyCards',
+    description: 'this is where you add or delete cards from the deck',
+    fields: () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLInt, unique: true},
+        cmc: {type: GraphQLString},
+        colors: {type: new GraphQLList(GraphQLString)},
+        types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        subtypes: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        power: {type: GraphQLString},
+        toughness: {type: GraphQLString},
+        imageUrl: {type: GraphQLString, unique: true},
+        cid: {type: GraphQLString, unique: true},
+    }),
+});
+
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -81,7 +98,7 @@ const RootQuery = new GraphQLObjectType({
         },
         decks: {
             type: new GraphQLList(deckType),
-            description: 'Get all stations',
+            description: 'Get all decks',
             args: {
             },
             resolve: (parent, args) => {
@@ -151,37 +168,28 @@ const Mutation = new GraphQLObjectType({
                 }
             },
         },
-        modifyStation: {
-            type: stationType,
-            description: 'Modify station, authentication required.',
+        modifyDeck: {
+            type: deckType,
+            description: 'Modify deck by adding or removing cards, authentication required.',
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
-                Connections: {
-                    type: new GraphQLList(ModifyConnection),
+                name: {type: GraphQLString},
+                cover: {type: GraphQLString},
+                cards: {
+                    type: new GraphQLList(modifyCards),
                 },
-                Title: {type: GraphQLString},
-                AddressLine1: {type: GraphQLString},
-                Town: {type: GraphQLString},
-                StateOrProvince: {type: GraphQLString},
-                Postcode: {type: GraphQLString},
+                user: {type: GraphQLString},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
                     await authController.checkAuth(req, res);
-                    const conns = await Promise.all(args.Connections.map(async conn => {
-                        const result = await connection.findByIdAndUpdate(conn.id, conn,
-                            {new: true});
-                        return result;
-                    }));
-
-                    let newStation = {
-                        Title: args.Title,
-                        AddressLine1: args.AddressLine1,
-                        Town: args.Town,
-                        StateOrProvince: args.StateOrProvince,
-                        Postcode: args.Postcode,
+                    let modifiedDeck = {
+                        name: args.name,
+                        cover: args.cover,
+                        cards: args.cards,
+                        user: args.user,
                     };
-                    return await station.findByIdAndUpdate(args.id, newStation,
+                    return await deck.findByIdAndUpdate(args.id, modifiedDeck,
                         {new: true});
                 }
                 catch (err) {
@@ -189,23 +197,16 @@ const Mutation = new GraphQLObjectType({
                 }
             },
         },
-        deleteStation: {
-            type: stationType,
-            description: 'Delete station, authentication required.',
+        deleteDeck: {
+            type: deckType,
+            description: 'Delete a deck, authentication required.',
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
                     authController.checkAuth(req, res);
-                    // delete connections
-                    const stat = await station.findById(args.id);
-                    const delResult = await Promise.all(
-                        stat.Connections.map(async (conn) => {
-                            return await connection.findByIdAndDelete(conn._id);
-                        }));
-                    console.log('delete result', delResult);
-                    const result = await station.findByIdAndDelete(args.id);
+                    const result = await deck.findByIdAndDelete(args.id);
                     console.log('delete result', result);
                     return result;
                 }
@@ -220,7 +221,7 @@ const Mutation = new GraphQLObjectType({
             args: {
                 username: {type: new GraphQLNonNull(GraphQLString)},
                 password: {type: new GraphQLNonNull(GraphQLString)},
-                full_name: {type: new GraphQLNonNull(GraphQLString)},
+                email: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
@@ -232,10 +233,9 @@ const Mutation = new GraphQLObjectType({
                     const newUser = new user(userWithHash);
                     const result = await newUser.save();
                     if (result !== null) {
-                        // automatic login
-                        req.body = args; // inject args to request body for passport
+                        req.body = args;
                         const authResponse = await authController.login(req, res);
-                        console.log('ar', authResponse);
+                        console.log('register user auth response', authResponse);
                         return {
                             id: authResponse.user._id,
                             ...authResponse.user,
@@ -254,4 +254,5 @@ const Mutation = new GraphQLObjectType({
 });
 module.exports = new GraphQLSchema({
     query: RootQuery,
+    mutation: Mutation,
 });

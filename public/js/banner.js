@@ -3,7 +3,7 @@
 const apiURL = 'http://localhost:3000/graphql';
 const token = localStorage.getItem('token');
 const logb = document.getElementById('logB');
-const bar = document.getElementsByClassName('navbar');
+const nav = document.getElementById('navbar');
 
 const fetchGraphql = async (query) => {
     const options = {
@@ -49,7 +49,8 @@ const checkUser = async () => {
     if (result.user) {
         console.log('asdadsadasd');
         logb.innerText = "Logout";
-        bar.innerHTML += `<li class="navRLi"><a href="profile.js">Profile</a></li>`;
+        nav.innerHTML += `<li class="navRLi"><a href="profile.html">Profile</a></li>`;
+        getAll(result.user.username)
     }
 };
 
