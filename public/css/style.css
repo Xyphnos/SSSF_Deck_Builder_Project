@@ -37,29 +37,14 @@ html,
     border-right: 1px solid #bbb;
 }
 
-.navLLi a {
+.nav li a {
     display: block;
     color: white;
-    height: 50px;
     padding: 14px 16px;
     text-decoration: none;
 }
-.navRLi a {
-    display: block;
-    color: white;
-    height: 50px;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-/* Change the link color to #111 (black) on hover */
-.navLLi a:hover {
-    background-color: #111;
-}
-.navRLi a:hover {
-    background-color: #111;
-}/* Center the content in the browser window */
-.active {
-    background-color: rgb(8, 55, 105);
+.nav li a:hover {
+    background-color: #083769;
 }
 
 .container {
@@ -73,6 +58,11 @@ html,
 .title {
     font-size: 3rem;
 }
+
+#matchWarning{
+    color: red;
+}
+
 .bg {
     height: 70vh;
     overflow: auto;
@@ -80,6 +70,29 @@ html,
     padding: 1rem;
     text-align: center;
 }
+
+#bg1 {
+    height: 70vh;
+    overflow: auto;
+    background-color: rgba(255,255,255,0.9);
+    padding: 1rem;
+    text-align: center;
+}
+#bg2 {
+    height: 70vh;
+    overflow: auto;
+    background-color: rgba(255,255,255,0.9);
+    padding: 1rem;
+    text-align: center;
+}
+#bg3 {
+    height: 70vh;
+    overflow: auto;
+    background-color: rgba(255,255,255,0.9);
+    padding: 1rem;
+    text-align: center;
+}
+
 .input {
     height: 30px;
     width: 300px;
@@ -94,8 +107,14 @@ html,
     flex-wrap: wrap;
     align-items: center;
 }
+#registerform {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
 
-#loginb {
+.subb {
     display: inline;
     height: 40px;
     width: 100px;
@@ -116,20 +135,19 @@ ul {
     display: inline-grid;
 }
 
-#loader-wrapper {
-    position: absolute;
+.LWrapper {
+    position: relative;
     top: 35%;
-    left: calc(50% - 45px);
     display: inline;
     justify-content: center;
     align-items: center;
     opacity: 0;
     text-align: center;
 }
-#loader-wrapper.fadeIn{
+.LWrapper.fadeIn{
     opacity: 100;
 }
-#loader-wrapper.fadeOut{
+.LWrapper.fadeOut{
     opacity: 0;
 }
 .loader {

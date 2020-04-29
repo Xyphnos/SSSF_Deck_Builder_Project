@@ -256,6 +256,7 @@ const Mutation = new GraphQLObjectType({
                 email: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve: async (parent, args, {req, res}) => {
+                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasd')
                 try {
                     const hash = await bcrypt.hash(args.password, saltRound);
                     const userWithHash = {

@@ -6,26 +6,52 @@
 </head>
 <body class="fullscreen">
 <ul class="nav" id="navbar">
-    <li class="navLLi"><a href="index.html">Home</a></li>
-    <li class="navLLi"><a href="List.html">Card Search</a></li>
-    <li class="navRLi"><a href="login.html" id="logB">Login</a></li>
+    <li class="navLLi"><a href="/public/html/index.html">Home</a></li>
+    <li class="navLLi"><a href="/public/html/List.html">Card Search</a></li>
+    <li class="navRLi"><a href="/public/html/login.html" id="logB">Login</a></li>
 </ul>
 <div class="container">
     <form id="searchForm">
         <input type="text" id="input" placeholder="Search for a card">
         <button id="search" type="submit">Search</button>
     </form>
-    <form id="searchCover">
-        <input type="text" id="inputC" placeholder="Search for cover">
-        <button id="searchC" type="submit">Search</button>
-    </form>
-    <div class="bg">
-        <div id="loader-wrapper">
+    <div id="bg1">
+        <div class="LWrapper" id="loader-wrapper1">
                 <span class="loader">
                 </span>
             <p id="fetchPrompt">fetching cards</p>
         </div>
         <ul id="cardL">
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <form id="searchCover">
+        <input type="text" id="inputC" placeholder="Search for cover">
+        <button id="searchC" type="submit">Search</button>
+    </form>
+    <div id="bg2">
+        <div class="LWrapper" id="loader-wrapper2">
+                <span class="loader">
+                </span>
+            <p id="fetchPrompt">fetching cards</p>
+        </div>
+        <ul id="coverL">
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <form id="rename">
+        <input type="text" id="renameInput" placeholder="Rename Deck">
+        <button id="" type="submit">Search</button>
+    </form>
+    <div id="bg3">
+        <div class="LWrapper" id="loader-wrapper3">
+                <span class="loader">
+                </span>
+            <p id="fetchPrompt">fetching cards</p>
+        </div>
+        <ul id="info">
         </ul>
     </div>
 </div>
