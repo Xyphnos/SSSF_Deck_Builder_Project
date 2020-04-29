@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/public/css/style.css" type="text/css">
+</head>
+<body class="fullscreen">
+<ul class="nav" id="navbar">
+    <li class="navLLi"><a href="../public/html/index.html">Home</a></li>
+    <li class="navLLi"><a href="../public/html/List.html">Card Search</a></li>
+    <li class="navRLi"><a href="../public/html/login.html" id="logB">Login</a></li>
+</ul>
+<div class="container">
+    <form id="newDeck">
+        <input type="text" id="create" placeholder="Deck Name">
+        <button id="createNew" type="submit">Create New</button>
+    </form>
+    <div class="bg">
+        <div id="loader-wrapper">
+                <span class="loader">
+                </span>
+            <p id="fetchPrompt">fetching decks</p>
+        </div>
+        <ul id="decklist">
+        </ul>
+    </div>
+</div>
+<script src="/public/js/banner.js"></script>
+<script src="/public/js/profile.js"></script>
+</body>
+</html>

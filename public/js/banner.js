@@ -1,6 +1,7 @@
 'use strict';
 
 const apiURL = 'http://localhost:3000/graphql';
+const profile = `http://localhost:3000/profile/`;
 const token = localStorage.getItem('token');
 const logb = document.getElementById('logB');
 const nav = document.getElementById('navbar');
@@ -18,7 +19,6 @@ const fetchGraphql = async (query) => {
     try {
         const response = await fetch(apiURL, options);
         const json = await response.json();
-        console.log('json from banner fetch',json);
         return json.data;
     }
     catch (e) {
@@ -45,12 +45,12 @@ const checkUser = async () => {
 `,
     };
     const result = await fetchGraphql(query);
-    console.log('banner result ', result);
-    if (result.user) {
-        console.log('asdadsadasd');
+    const info = result.user;
+    if (info) {
         logb.innerText = "Logout";
-        nav.innerHTML += `<li class="navRLi"><a href="profile.html">Profile</a></li>`;
-        getAll(result.user.username)
+        nav.innerHTML += `<li class="navRLi"><a href="${profile + info.username}">Profile</a></li>`;
+        getAll(info.username);
+        return info
     }
 };
 

@@ -42,7 +42,7 @@ const userType = new GraphQLObjectType({
         id: {type: GraphQLID},
         username: {type: GraphQLString},
         decks: {
-            type: new GraphQLList(deckType),
+            type: GraphQLList(deckType),
             resolve(parent, args) {
                 return deck.find({_id: {$in: parent.decks}});
             },
@@ -58,7 +58,7 @@ const deckType = new GraphQLObjectType({
         name: {type: GraphQLString},
         cover: {type: GraphQLString},
         cards: {
-            type: new GraphQLList(cardType),
+            type: GraphQLList(cardType),
             resolve(parent, args) {
                 return card.find({_id: {$in: parent.cards}});
             },
@@ -81,6 +81,14 @@ const modifyCards = new GraphQLInputObjectType({
         toughness: {type: GraphQLString},
         imageUrl: {type: GraphQLString, unique: true},
         cid: {type: GraphQLString, unique: true},
+    }),
+});
+
+const InputDeck = new GraphQLInputObjectType({
+    name: 'InputDeck',
+    description: 'Connection type, level, current and quantity',
+    fields: () => ({
+        id: {type: GraphQLID}
     }),
 });
 
@@ -152,7 +160,7 @@ const Mutation = new GraphQLObjectType({
             type: deckType,
             description: 'Add a deck and see if authentication actually works',
             args: {
-                name: {type: new GraphQLNonNull(GraphQLString),},
+                name: {type: new GraphQLNonNull(GraphQLString)},
                 user: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve: async (parent, args, {req, res}) => {
@@ -162,6 +170,30 @@ const Mutation = new GraphQLObjectType({
                         ...args
                     });
                     return newDeck.save();
+                }
+                catch (err) {
+                    throw new Error(err);
+                }
+            },
+        },
+        addDeckToUser: {
+            type: userType,
+            description: 'Run with addDeck to add the deck id to the user',
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                decks: {type: new GraphQLNonNull(GraphQLID)},
+            },
+            resolve: async (parent, args ) => {
+                try {
+                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd');
+                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd');
+                    const id = await user.findById(args.id);
+                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd',id);
+                    if (!id.decks) {
+                        id.decks = [];
+                }
+                    id.decks.push(args.decks);
+                    return await user.findByIdAndUpdate(args.id, id, { new: true });
                 }
                 catch (err) {
                     throw new Error(err);

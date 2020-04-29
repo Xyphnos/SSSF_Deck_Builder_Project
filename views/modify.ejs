@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body class="fullscreen">
+<ul class="nav" id="navbar">
+    <li class="navLLi"><a href="index.html">Home</a></li>
+    <li class="navLLi"><a href="List.html">Card Search</a></li>
+    <li class="navRLi"><a href="login.html" id="logB">Login</a></li>
+</ul>
+<div class="container">
+    <form id="searchForm">
+        <input type="text" id="input" placeholder="Search for a card">
+        <button id="search" type="submit">Search</button>
+    </form>
+    <form id="searchCover">
+        <input type="text" id="inputC" placeholder="Search for cover">
+        <button id="searchC" type="submit">Search</button>
+    </form>
+    <div class="bg">
+        <div id="loader-wrapper">
+                <span class="loader">
+                </span>
+            <p id="fetchPrompt">fetching cards</p>
+        </div>
+        <ul id="cardL">
+        </ul>
+    </div>
+</div>
+<script src="/public/js/banner.js"></script>
+<script src="/public/js/modify.js"></script>
+</body>
+</html>

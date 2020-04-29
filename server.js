@@ -15,10 +15,14 @@ const passport = require('./utils/pass');
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const deckRoute = require('./routes/deckRoute');
+const profileRoute = require('./routes/profileRoute');
+const modRoute = require('./routes/modRoute');
 
 app.use(cors());
+app.set('views', './views');
+app.set('view engine', 'ejs');
 app.use(express.json());
-app.use(express.static('public'));
+app.use('/public',express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -26,6 +30,8 @@ app.use('/cardSearch', searchRoute);
 app.use('/decks', deckRoute);
 app.use('/user', userRoute);
 app.use('/auth', authRoute);
+app.use('/profile', profileRoute);
+app.use('/modify', modRoute);
 app.use('/graphql', (req, res) => {
     graphQlHttp({schema, graphiql: true, context: {req, res}})(req,
         res);

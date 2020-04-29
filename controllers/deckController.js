@@ -50,17 +50,15 @@ const deckAdd = async (req, res) => {
             user: name
         });
         const user = {username: name};
-        const deckU = await userModel.findOneAndUpdate(user, {decks: post._id});
+        await userModel.findOneAndUpdate(user, {decks: post._id});
         res.send(`Deck created with id: ${post._id}.`);
     } catch(e){
         console.error('deckAdd', e);
     }
 };
 const deckDelete = async (req, res) => {
-
 };
 const deckModify = async (req, res) => {
-
 };
 
 module.exports = {
