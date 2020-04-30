@@ -46,12 +46,28 @@ const checkUser = async () => {
     };
     const result = await fetchGraphql(query);
     const info = result.user;
-    if (info) {
-        logb.innerText = "Logout";
-        nav.innerHTML += `<li class="navRLi"><a href="${profile + info.username}">Profile</a></li>`;
-        getAll(info.username);
-        return info
+    return info
+};
+
+const checkState = async() =>{
+    let ifCheck = await checkUser();
+    if(ifCheck){
+        logb.href = '#';
+        logb.innerText = 'Logout';
+        logb.id = 'logOut';
+        nav.innerHTML += `<li class="navRLi"><a href="${profile + ifCheck.username}">Profile</a></li>`;
+        const logOut = document.getElementById('logOut');
+        logOut.addEventListener('click', (event) =>{
+            event.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = 'http://localhost:3000/public/html/index.html';
+        });
     }
 };
 
-checkUser();
+checkState();
+
+
+
+
+

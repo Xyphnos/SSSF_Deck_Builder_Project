@@ -7,7 +7,6 @@
     const form = document.getElementById('searchForm');
     const loader = document.getElementById('loader-wrapper');
 
-
     const fetchCard = async (search) => {
         try {
             loader.classList.toggle('fadeIn');

@@ -61,6 +61,12 @@ const createNew = async (dname, username, id) => {
     }
 };
 
+window.addEventListener('load', async (event) =>{
+    const check = await checkUser();
+    const username = check.username;
+    await getAll(username);
+});
+
 nform.addEventListener("submit", async (event) => {
     event.preventDefault();
     const check = await checkUser();

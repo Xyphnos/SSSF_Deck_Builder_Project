@@ -2,11 +2,9 @@
 const apiURLu = 'http://localhost:3000/decks';
 const ul = document.getElementById('decklist');
 
-
 const getEvery = async () =>{
     try{
         const result = await fetch(apiURLu);
-        console.log(result);
         const json = await result.json();
         let limit;
         if(json.length < 10){
@@ -15,7 +13,6 @@ const getEvery = async () =>{
         else{
             limit = 10;
         }
-        console.log('this is the getEvery json', json);
 
         for( let i = 0; i < limit; i++) {
             ul.innerHTML += `<li><p>${json[i].name}<img src=${json[i].cover}></p></li>`;
@@ -28,5 +25,5 @@ const getEvery = async () =>{
 
 
 window.addEventListener('load', async (event) =>{
-    getEvery();
+    await getEvery();
 });
