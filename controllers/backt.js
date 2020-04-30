@@ -46,21 +46,15 @@ const cardSearch = async (req, res) => {
         res.json(cards(card))
     }
     catch (e) {
-        console.error('controller error', e)
+        console.error('controller error in card search', e)
     }
 };
 
 const entrySearch = async (req, res) => {
-
     try {
-
         const query = req.query;
-        let name = query.name;
         let id = query.id;
 
-        if(name !==  undefined) {
-            name = JSON.parse(name);
-        }
         if(id !==  undefined) {
             id = JSON.parse(id);
         }
@@ -72,8 +66,8 @@ const entrySearch = async (req, res) => {
             });
          */
 
-        const card = await mtg.card.where({ name: name});
-
+        const card = await mtg.card.where({ id: id.id});
+        console.log(card);
 
         const cards = (list) =>{
             const entries = [];
@@ -103,7 +97,7 @@ const entrySearch = async (req, res) => {
         res.json(cards(card))
     }
     catch (e) {
-        console.error('controller error', e)
+        console.error('controller error in entry search')
     }
 };
 

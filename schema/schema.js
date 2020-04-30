@@ -17,8 +17,9 @@ const saltRound = 12;
 
 const authController = require('../controllers/authController');
 const deck = require('../models/deck');
-const card = require('../models/card');
+//const card = require('../models/card');
 const user = require('../models/user');
+
 
 const cardType = new GraphQLObjectType({
     name: 'card',
@@ -27,8 +28,8 @@ const cardType = new GraphQLObjectType({
         name: {type: GraphQLInt, unique: true},
         cmc: {type: GraphQLString},
         colors: {type: new GraphQLList(GraphQLString)},
-        types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
-        subtypes: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        types: {type: new GraphQLList(GraphQLString)},
+        subtypes: {type: new GraphQLList(GraphQLString)},
         power: {type: GraphQLString},
         toughness: {type: GraphQLString},
         imageUrl: {type: GraphQLString, unique: true},
@@ -185,10 +186,7 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: async (parent, args ) => {
                 try {
-                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd');
-                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd');
                     const id = await user.findById(args.id);
-                    console.log('asdasdasdasdasdasdasdadsaddasdadasdasdsaddadasdasdasd',id);
                     if (!id.decks) {
                         id.decks = [];
                 }
@@ -210,7 +208,6 @@ const Mutation = new GraphQLObjectType({
                 cards: {
                     type: new GraphQLList(modifyCards),
                 },
-                user: {type: GraphQLString},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {

@@ -10,8 +10,9 @@ const getAll = async (username) =>{
     try{
         const result = await fetch(apiURLi + '?user=' + `${username}`);
         const json = await result.json();
+        console.log(json);
         for( let i = 0; i < json.length; i++) {
-            ul.innerHTML += `<li><a href="${modify + username}">${json[i].name}<img src=${json[i].cover}></a></li>`;
+            ul.innerHTML += `<li><a href="${modify + json[i]._id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
         }
     }catch(e){
         console.error('getAll error ', e)

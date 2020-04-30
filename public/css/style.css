@@ -128,6 +128,23 @@ html,
     display: inline-block;
 }
 
+.modF.active{
+    color: white;
+    background-color: #1c6aa6;
+}
+
+.modF:hover{
+    color: white;
+    background-color: #1c6aa6;
+}
+#qty{
+    float: right;
+    padding-left: 10px;
+}
+#amountI{
+    width: 30px;
+}
+
 ul {
     margin: 0;
     padding: 0;
@@ -146,9 +163,6 @@ ul {
 }
 .LWrapper.fadeIn{
     opacity: 100;
-}
-.LWrapper.fadeOut{
-    opacity: 0;
 }
 .loader {
     display: inline-block;
