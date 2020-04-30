@@ -8,6 +8,7 @@ const ulCa = document.getElementById('cardL');
 const ulCo = document.getElementById('coverL');
 const sform = document.getElementById('searchForm');
 const cform = document.getElementById('searchCover');
+const saveForm =document.getElementById('saveForm');
 const loader1 = document.getElementById('loader-wrapper1');
 const loader2 = document.getElementById('loader-wrapper2');
 
@@ -20,7 +21,25 @@ const fetchCard = async (search, ul, loader) => {
         const json = await response.json();
         console.log(json);
         for( let i = 0; i < json.length; i++) {
-            ul.innerHTML += `<li><a class="modEntry">${json[i].name}</a></li>`;
+            ul.innerHTML += `<li><a id="${json[1].id}">${json[i].name}</a></li>`;
+        }
+        loader.classList.toggle('fadeOut');
+
+    } catch (e) {
+        console.error('test ', e);
+        return false;
+    }
+};
+
+const fetchEntries = async (entries, loader) => {
+    try {
+        loader.classList.toggle('fadeIn');
+        const response = await fetch(apiURLu + '/entries?name=' + JSON.stringify(search));
+        console.log(response);
+        const json = await response.json();
+        console.log(json);
+        for( let i = 0; i < json.length; i++) {
+
         }
         loader.classList.toggle('fadeOut');
 
@@ -36,6 +55,11 @@ sform.addEventListener("submit", async (event) => {
     ulCa.innerHTML = '';
     const que = input.value;
     fetchCard(que, ulCa, loader1);
+});
+saveForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    ulCa.innerHTML = '';
+    fetchEntries(que, ulCa, loader1);
 });
 cform.addEventListener("submit", async (event) => {
     event.preventDefault();

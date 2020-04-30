@@ -7,11 +7,11 @@ const getEvery = async () =>{
         const result = await fetch(apiURLu);
         const json = await result.json();
         let limit;
-        if(json.length < 10){
+        if(json.length < 15){
             limit = json.length;
         }
         else{
-            limit = 10;
+            limit = 15;
         }
 
         for( let i = 0; i < limit; i++) {

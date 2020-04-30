@@ -66,8 +66,3 @@ const checkState = async() =>{
 };
 
 checkState();
-
-
-
-
-
