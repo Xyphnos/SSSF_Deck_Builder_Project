@@ -8,8 +8,6 @@ const deckSchema = new Schema({
     cover: String,
     cards: [{
         card: { type: Schema.Types.ObjectId, ref: 'Card'},
-        amount: {type: String},
-        default: [],
     }],
     user: {
         type: String,

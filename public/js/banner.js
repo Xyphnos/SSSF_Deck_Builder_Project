@@ -17,6 +17,7 @@ const fetchGraphql = async (query) => {
         body: JSON.stringify(query),
     };
     try {
+        console.log(options.body);
         const response = await fetch(apiURL, options);
         const json = await response.json();
         return json.data;

@@ -17,7 +17,7 @@ const saltRound = 12;
 
 const authController = require('../controllers/authController');
 const deck = require('../models/deck');
-//const card = require('../models/card');
+const card = require('../models/card');
 const user = require('../models/user');
 
 
@@ -25,8 +25,8 @@ const cardType = new GraphQLObjectType({
     name: 'card',
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLInt, unique: true},
-        cmc: {type: GraphQLString},
+        name: {type: GraphQLString, unique: true},
+        cmc: {type: GraphQLInt},
         colors: {type: new GraphQLList(GraphQLString)},
         types: {type: new GraphQLList(GraphQLString)},
         subtypes: {type: new GraphQLList(GraphQLString)},
@@ -68,28 +68,36 @@ const deckType = new GraphQLObjectType({
     }),
 });
 
+const inputCards = new GraphQLInputObjectType({
+    name: 'inputCards',
+    description: 'this is where you add or delete cards from the deck',
+    fields: () => ({
+        name: {type: new GraphQLNonNull(GraphQLString)},
+        cmc: {type: new GraphQLNonNull(GraphQLInt)},
+        colors: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        subtypes: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        power: {type: new GraphQLNonNull(GraphQLString)},
+        toughness: {type: new GraphQLNonNull(GraphQLString)},
+        imageUrl: {type: new GraphQLNonNull(GraphQLString)},
+        cid: {type: new GraphQLNonNull(GraphQLString)},
+    }),
+});
+
 const modifyCards = new GraphQLInputObjectType({
     name: 'modifyCards',
     description: 'this is where you add or delete cards from the deck',
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLInt, unique: true},
-        cmc: {type: GraphQLString},
+        name: {type: GraphQLString, unique: true},
+        cmc: {type: GraphQLInt},
         colors: {type: new GraphQLList(GraphQLString)},
         types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
-        subtypes: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+        subtypes: {type: new GraphQLList(GraphQLString)},
         power: {type: GraphQLString},
         toughness: {type: GraphQLString},
         imageUrl: {type: GraphQLString, unique: true},
         cid: {type: GraphQLString, unique: true},
-    }),
-});
-
-const InputDeck = new GraphQLInputObjectType({
-    name: 'InputDeck',
-    description: 'Connection type, level, current and quantity',
-    fields: () => ({
-        id: {type: GraphQLID}
     }),
 });
 
@@ -206,16 +214,26 @@ const Mutation = new GraphQLObjectType({
                 name: {type: GraphQLString},
                 cover: {type: GraphQLString},
                 cards: {
-                    type: new GraphQLList(modifyCards),
+                    type: new GraphQLList(inputCards)
                 },
+                user: {type: GraphQLString},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
-                    await authController.checkAuth(req, res);
+
+                    const cards = await Promise.all(args.cards.map(async card1 => {
+                            let newCard = new card(card1);
+                            const result = await newCard.save();
+                            return result._id;
+                        /*-----------------trying things here------------------*/
+                        /*const result = await card.findByIdAndUpdate(cards.id, cards,
+                            {new: true});
+                        return result;*/
+                    }));
                     let modifiedDeck = {
                         name: args.name,
                         cover: args.cover,
-                        cards: args.cards,
+                        cards: cards,
                         user: args.user,
                     };
                     return await deck.findByIdAndUpdate(args.id, modifiedDeck,
@@ -253,7 +271,6 @@ const Mutation = new GraphQLObjectType({
                 email: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve: async (parent, args, {req, res}) => {
-                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasd')
                 try {
                     const hash = await bcrypt.hash(args.password, saltRound);
                     const userWithHash = {

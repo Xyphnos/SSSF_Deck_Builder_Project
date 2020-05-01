@@ -39,7 +39,6 @@ const cardSearch = async (req, res) => {
                     entries.push({name: list[i].name, URL: list[i].imageUrl, id: list[i].id})
                 }
             }
-            console.log(entries);
             return entries
         };
 
@@ -67,7 +66,6 @@ const entrySearch = async (req, res) => {
          */
 
         const card = await mtg.card.where({ id: id.id});
-        console.log(card);
 
         const cards = (list) =>{
             const entries = [];
@@ -85,12 +83,11 @@ const entrySearch = async (req, res) => {
                         subtypes: list[i].subtypes,
                         power: list[i].power,
                         toughness: list[i].toughness,
-                        imageURL: list[i].imageUrl,
+                        imageUrl: list[i].imageUrl,
                         cid: list[i].id,
                     })
                 }
             }
-            console.log(entries);
             return entries
         };
 
