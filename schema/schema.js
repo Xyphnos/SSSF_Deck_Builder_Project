@@ -25,15 +25,15 @@ const cardType = new GraphQLObjectType({
     name: 'card',
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString, unique: true},
+        name: {type: GraphQLString},
         cmc: {type: GraphQLInt},
         colors: {type: new GraphQLList(GraphQLString)},
         types: {type: new GraphQLList(GraphQLString)},
         subtypes: {type: new GraphQLList(GraphQLString)},
         power: {type: GraphQLString},
         toughness: {type: GraphQLString},
-        imageUrl: {type: GraphQLString, unique: true},
-        cid: {type: GraphQLString, unique: true},
+        imageUrl: {type: GraphQLString},
+        cid: {type: GraphQLString},
     }),
 });
 
@@ -89,15 +89,15 @@ const modifyCards = new GraphQLInputObjectType({
     description: 'this is where you add or delete cards from the deck',
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString, unique: true},
+        name: {type: GraphQLString},
         cmc: {type: GraphQLInt},
         colors: {type: new GraphQLList(GraphQLString)},
         types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
         subtypes: {type: new GraphQLList(GraphQLString)},
         power: {type: GraphQLString},
         toughness: {type: GraphQLString},
-        imageUrl: {type: GraphQLString, unique: true},
-        cid: {type: GraphQLString, unique: true},
+        imageUrl: {type: GraphQLString},
+        cid: {type: GraphQLString},
     }),
 });
 
@@ -170,13 +170,29 @@ const Mutation = new GraphQLObjectType({
             description: 'Add a deck and see if authentication actually works',
             args: {
                 name: {type: new GraphQLNonNull(GraphQLString)},
+                cover: {type: GraphQLString},
+                cards: {
+                    type: new GraphQLNonNull(new GraphQLList(inputCards)),
+                },
                 user: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
                     await authController.checkAuth(req, res);
+                    const cards = await Promise.all(args.cards.map(async card1 => {
+
+                        let newCard = new card(card1);
+                        const result = await newCard.save();
+                        return result._id;
+
+                        /*-----------------trying things here------------------*/
+
+
+                    }));
+
                     let newDeck = new deck({
-                        ...args
+                        ...args,
+                        cards: cards
                     });
                     return newDeck.save();
                 }
@@ -214,7 +230,7 @@ const Mutation = new GraphQLObjectType({
                 name: {type: GraphQLString},
                 cover: {type: GraphQLString},
                 cards: {
-                    type: new GraphQLList(inputCards)
+                    type: new GraphQLNonNull(new GraphQLList(modifyCards)),
                 },
                 user: {type: GraphQLString},
             },
@@ -222,14 +238,21 @@ const Mutation = new GraphQLObjectType({
                 try {
 
                     const cards = await Promise.all(args.cards.map(async card1 => {
-                            let newCard = new card(card1);
-                            const result = await newCard.save();
-                            return result._id;
+
+                        let newCard = new card(card1);
+                        const result = await newCard.save();
+                        return result._id;
+
+
                         /*-----------------trying things here------------------*/
-                        /*const result = await card.findByIdAndUpdate(cards.id, cards,
+                        /*
+                        const result = await card.findByIdAndUpdate(card1.id, card1,
                             {new: true});
-                        return result;*/
+                        return result;
+                        */
                     }));
+                    console.log(cards);
+
                     let modifiedDeck = {
                         name: args.name,
                         cover: args.cover,

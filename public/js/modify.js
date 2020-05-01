@@ -114,7 +114,7 @@ const sendEntries = async (name, entries, loader) => {
         };
 
         const query = {
-            query: ` mutation ( $id: ID!, $name: String!, $cover: String!, $cards: [inputCards!]!, $user: String!)
+            query: ` mutation ( $id: ID!, $name: String!, $cover: String!, $cards: [modifyCards!]!, $user: String!)
             {
               modifyDeck(
               id: $id,

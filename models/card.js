@@ -4,15 +4,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const cardSchema = new Schema({
-    name: {type: String, unique: true},
+    name:  String,
     cmc: String,
     colors: [{type: String}],
     types: [{type: String}],
     subtypes: [{type: String}],
     power: String,
     toughness: String,
-    imageUrl: {type: String, unique: true},
-    cid: {type: String, unique: true},
+    imageUrl: String,
+    cid: String,
 
 });
 
