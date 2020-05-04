@@ -1,18 +1,19 @@
 'use strict';
 
-const apiURLi = 'http://localhost:3000/decks';
 const modify = `http://localhost:3000/modify/`;
+const single = `http://localhost:3000/single/`;
 const nform = document.getElementById('newDeck');
 const bar = document.getElementById('create');
 const ul = document.getElementById('decklist');
 
-const getAll = async (username) =>{
+const getAll = async () =>{
+    const check = await checkUser();
+    console.log(check.decks);
     try{
-        const result = await fetch(apiURLi + '?user=' + `${username}`);
-        const json = await result.json();
+        const json = await check.decks;
         console.log(json);
         for( let i = 0; i < json.length; i++) {
-            ul.innerHTML += `<li><a href="${modify + json[i]._id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
+            ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
         }
     }catch(e){
         console.error('getAll error ', e)
@@ -20,17 +21,12 @@ const getAll = async (username) =>{
 };
 
 
-const createNew = async (dname, username, id) => {
+const createNew = async (id) => {
     const query = {
         query: ` mutation {
-        addDeck(name: "${dname}", user: "${username}") {
+        addDeck(user: "${id}") {
             id
             name
-            cover
-            cards {
-                name
-                imageUrl
-            }
             user
         }
    }
@@ -39,7 +35,7 @@ const createNew = async (dname, username, id) => {
     try{
         const result = await fetchGraphql(query);
         const addedID = result.addDeck.id;
-        localStorage.setItem('token', result.token);
+        console.log(result);
 
         const query2 = {
             query: ` mutation {
@@ -50,29 +46,23 @@ const createNew = async (dname, username, id) => {
    `,
         };
         try {
-            console.log(query);
             const res = await fetchGraphql(query2);
-            console.log(res);
         }catch(e){
 
         }
-        window.location.href = modify + `${dname}`;
+        window.location.href = modify + `${addedID}`;
     }catch(e){
         console.error(e);
     }
 };
 
 window.addEventListener('load', async (event) =>{
-    const check = await checkUser();
-    const username = check.username;
-    await getAll(username);
+    await getAll();
 });
 
 nform.addEventListener("submit", async (event) => {
     event.preventDefault();
     const check = await checkUser();
-    const deckName = bar.value;
-    const username = check.username;
     let uid = check.id;
-    createNew(deckName, username, uid)
+    createNew(uid)
 });

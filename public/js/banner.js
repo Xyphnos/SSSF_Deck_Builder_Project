@@ -17,7 +17,6 @@ const fetchGraphql = async (query) => {
         body: JSON.stringify(query),
     };
     try {
-        console.log(options.body);
         const response = await fetch(apiURL, options);
         const json = await response.json();
         return json.data;
@@ -39,15 +38,24 @@ const checkUser = async () => {
     id
     name
     cover
+    cards{
+    card{
+    name
+    }
+    }
     }
     token
   }
 }
 `,
     };
-    const result = await fetchGraphql(query);
-    const info = result.user;
-    return info
+    try {
+        const result = await fetchGraphql(query);
+        const info = result.user;
+        return info
+    }catch(e){
+        console.log(e)
+    }
 };
 
 const checkState = async() =>{

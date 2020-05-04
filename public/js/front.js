@@ -1,11 +1,31 @@
 'use strict';
-const apiURLu = 'http://localhost:3000/decks';
+
+const single = `http://localhost:3000/single/`;
 const ul = document.getElementById('decklist');
 
 const getEvery = async () =>{
     try{
-        const result = await fetch(apiURLu);
-        const json = await result.json();
+        const query = {
+            query: `{
+        decks{
+            id
+            name
+            cover
+            cards{
+            card{
+                id
+                name
+                }
+                amount
+            }
+            user
+        }
+   }
+   `,
+        };
+        const result = await fetchGraphql(query);
+        const json = await result.decks;
+        console.log(json);
         let limit;
         if(json.length < 15){
             limit = json.length;
@@ -13,9 +33,8 @@ const getEvery = async () =>{
         else{
             limit = 15;
         }
-
         for( let i = 0; i < limit; i++) {
-            ul.innerHTML += `<li><p>${json[i].name}<img src=${json[i].cover}></p></li>`;
+            ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
         }
         loader.classList.toggle('fadeOut');
     }catch(e){

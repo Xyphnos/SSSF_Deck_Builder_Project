@@ -64,11 +64,36 @@ html,
 }
 
 .bg {
-    height: 70vh;
     overflow: auto;
-    background-color: rgba(255,255,255,0.9);
     padding: 1rem;
     text-align: center;
+}
+
+.DeckName{
+    font-size: 20px;
+}
+#hold{
+    column-width: 250px;
+    column-count: 1;
+    float: right;
+    display: block;
+    margin-right: 100px;
+    width: 300px;
+
+}
+
+#wrapper{
+    background-color: #606d82;
+    width: 100%;
+}
+
+#DeckName{
+    color: #FFffff;
+}
+
+#bg23{
+    float: left;
+    margin-left: 100px;
 }
 
 #bg1 {
@@ -132,6 +157,9 @@ html,
     color: white;
     background-color: #1c6aa6;
 }
+.modF.hide{
+    display: none;
+}
 
 .modF:hover{
     color: white;
@@ -150,6 +178,23 @@ ul {
     padding: 0;
     list-style-type: none;
     display: inline-grid;
+}
+.CL{
+    color: #FFffff;
+}
+.CLBG{
+   background-color:#828282;
+    opacity: 80%;
+    height: 350px;
+}
+
+#decklist{
+    grid-template-columns: repeat(5, 250px);
+    grid-template-rows: repeat(5, 250px);
+}
+#cardGrid{
+    grid-template-columns: repeat(5, 250px);
+    grid-template-rows: repeat(3, 250px);
 }
 
 .LWrapper {

@@ -17,6 +17,7 @@ const userRoute = require('./routes/userRoute');
 const deckRoute = require('./routes/deckRoute');
 const profileRoute = require('./routes/profileRoute');
 const modRoute = require('./routes/modRoute');
+const singleRoute = require('./routes/singleRoute');
 
 app.use(cors());
 app.set('views', './views');
@@ -32,10 +33,12 @@ app.use('/user', userRoute);
 app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
 app.use('/modify', modRoute);
+app.use('/single', singleRoute);
 app.use('/graphql', (req, res) => {
     graphQlHttp({schema, graphiql: true, context: {req, res}})(req,
         res);
 });
+
 
 http.listen(3000, () => {
     console.log('listening on port 3000');

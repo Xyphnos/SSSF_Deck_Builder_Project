@@ -1,3 +1,5 @@
+'use strict';
+
 const {
     GraphQLObjectType,
     GraphQLInputObjectType,
@@ -27,13 +29,26 @@ const cardType = new GraphQLObjectType({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
         cmc: {type: GraphQLInt},
-        colors: {type: new GraphQLList(GraphQLString)},
-        types: {type: new GraphQLList(GraphQLString)},
-        subtypes: {type: new GraphQLList(GraphQLString)},
+        colors: {type: GraphQLList(GraphQLString)},
+        types: {type: GraphQLList(GraphQLString)},
+        subtypes: {type: GraphQLList(GraphQLString)},
         power: {type: GraphQLString},
         toughness: {type: GraphQLString},
         imageUrl: {type: GraphQLString},
         cid: {type: GraphQLString},
+    }),
+});
+
+const cardEntry = new GraphQLObjectType({
+    name: 'cardEntry',
+    fields: () => ({
+        card: {
+            type: cardType,
+            resolve(parent, args) {
+                return card.findById(parent._id);
+            },
+        },
+        amount: {type: GraphQLInt},
     }),
 });
 
@@ -58,20 +73,25 @@ const deckType = new GraphQLObjectType({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
         cover: {type: GraphQLString},
-        cards: {
-            type: GraphQLList(cardType),
-            resolve(parent, args) {
-                return card.find({_id: {$in: parent.cards}});
-            },
-        },
-        user: {type: GraphQLString}
+        cards: {type: GraphQLList(cardEntry)},
+        user: {type: GraphQLString},
     }),
 });
 
 const inputCards = new GraphQLInputObjectType({
-    name: 'inputCards',
+   name: 'inputCards',
+    fields: () =>({
+        card: {type: new GraphQLNonNull(inputCard)},
+        amount: {type: new GraphQLNonNull(GraphQLInt)},
+    }),
+});
+
+
+const inputCard = new GraphQLInputObjectType({
+    name: 'inputCard',
     description: 'this is where you add or delete cards from the deck',
     fields: () => ({
+        id: {type: GraphQLID},
         name: {type: new GraphQLNonNull(GraphQLString)},
         cmc: {type: new GraphQLNonNull(GraphQLInt)},
         colors: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
@@ -88,16 +108,8 @@ const modifyCards = new GraphQLInputObjectType({
     name: 'modifyCards',
     description: 'this is where you add or delete cards from the deck',
     fields: () => ({
-        id: {type: GraphQLID},
-        name: {type: GraphQLString},
-        cmc: {type: GraphQLInt},
-        colors: {type: new GraphQLList(GraphQLString)},
-        types: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
-        subtypes: {type: new GraphQLList(GraphQLString)},
-        power: {type: GraphQLString},
-        toughness: {type: GraphQLString},
-        imageUrl: {type: GraphQLString},
-        cid: {type: GraphQLString},
+        card: {type: inputCard},
+        amount: {type: GraphQLInt}
     }),
 });
 
@@ -108,7 +120,9 @@ const RootQuery = new GraphQLObjectType({
         deck: {
             type: deckType,
             description: 'Get deck by id',
-            args: {id: {type: GraphQLID}},
+            args: {
+                id: {type: GraphQLID}
+                },
             resolve(parent, args) {
                 return deck.findById(args.id);
             },
@@ -116,9 +130,25 @@ const RootQuery = new GraphQLObjectType({
         decks: {
             type: new GraphQLList(deckType),
             description: 'Get all decks',
-            args: {
-            },
             resolve: (parent, args) => {
+                return deck.find();
+            },
+        },
+        card: {
+            type: cardType,
+            description: 'Get card by id',
+            args: {
+                id: {type: GraphQLID}
+            },
+            resolve(parent, args) {
+                return deck.findById(args.id);
+            },
+        },
+        cards:{
+            type: cardType,
+            description: 'Get cards',
+            resolve(parent, args) {
+                return card.find();
             },
         },
         user: {
@@ -169,30 +199,14 @@ const Mutation = new GraphQLObjectType({
             type: deckType,
             description: 'Add a deck and see if authentication actually works',
             args: {
-                name: {type: new GraphQLNonNull(GraphQLString)},
-                cover: {type: GraphQLString},
-                cards: {
-                    type: new GraphQLNonNull(new GraphQLList(inputCards)),
-                },
-                user: {type: new GraphQLNonNull(GraphQLString)},
+                user: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve: async (parent, args, {req, res}) => {
+                console.log('asdasdasdasdasdasdasdasdasddadadasd');
                 try {
                     await authController.checkAuth(req, res);
-                    const cards = await Promise.all(args.cards.map(async card1 => {
-
-                        let newCard = new card(card1);
-                        const result = await newCard.save();
-                        return result._id;
-
-                        /*-----------------trying things here------------------*/
-
-
-                    }));
-
                     let newDeck = new deck({
-                        ...args,
-                        cards: cards
+                        ...args
                     });
                     return newDeck.save();
                 }
@@ -232,26 +246,23 @@ const Mutation = new GraphQLObjectType({
                 cards: {
                     type: new GraphQLNonNull(new GraphQLList(modifyCards)),
                 },
-                user: {type: GraphQLString},
+                user: {type: GraphQLID},
             },
             resolve: async (parent, args, {req, res}) => {
+                console.log('asdsadasdasdasdsdsadasdasddsadasdasdasdasdadasdadasdasdasdasdas');
                 try {
-
+                    //await authController.checkAuth(req, res);
                     const cards = await Promise.all(args.cards.map(async card1 => {
-
-                        let newCard = new card(card1);
-                        const result = await newCard.save();
-                        return result._id;
-
-
-                        /*-----------------trying things here------------------*/
-                        /*
-                        const result = await card.findByIdAndUpdate(card1.id, card1,
-                            {new: true});
-                        return result;
-                        */
+                        const result = await card.find({cid: card1.card.cid});
+                            if (result[0] === undefined) {
+                                let newCard = new card(card1.card);
+                                const res = await newCard.save();
+                                return {_id: res._id, amount: card1.amount};
+                            } else {
+                                return {_id: result[0]._id, amount: card1.amount}
+                            }
                     }));
-                    console.log(cards);
+
 
                     let modifiedDeck = {
                         name: args.name,
@@ -259,8 +270,10 @@ const Mutation = new GraphQLObjectType({
                         cards: cards,
                         user: args.user,
                     };
-                    return await deck.findByIdAndUpdate(args.id, modifiedDeck,
+                    const asd =  await deck.findByIdAndUpdate(args.id, modifiedDeck,
                         {new: true});
+                    console.log(asd);
+                    return asd
                 }
                 catch (err) {
                     throw new Error(err);
@@ -272,13 +285,22 @@ const Mutation = new GraphQLObjectType({
             description: 'Delete a deck, authentication required.',
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
+                user: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
-                    authController.checkAuth(req, res);
-                    const result = await deck.findByIdAndDelete(args.id);
-                    console.log('delete result', result);
-                    return result;
+                    await authController.checkAuth(req, res);
+                    const thisU = await user.findById(args.user);
+                    const thisD = await deck.findById(args.id);
+                    if(thisU._id === thisD.user) {
+                        const result = await deck.findByIdAndDelete(args.id);
+                        console.log('delete result', result);
+                        return result;
+                    }
+                    else{
+                        console.log('Incorrect user/deck id pairing');
+                        return
+                    }
                 }
                 catch (err) {
                     throw new Error(err);

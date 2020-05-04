@@ -14,31 +14,10 @@ const saveForm =document.getElementById('saveDeck');
 const loader1 = document.getElementById('loader-wrapper1');
 const loader2 = document.getElementById('loader-wrapper2');
 const loader3 = document.getElementById('loader-wrapper3');
-const aLink = document.getElementsByClassName('modF');
+const cardAmount = document.getElementById('amountI');
 const newName = document.getElementById('renameInput');
 const entryList =[];
 const sendList = [];
-
-const fetchVariables = async (variables, query) => {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({variables, query}),
-    };
-    try {
-        console.log(options.body);
-        const response = await fetch(apiURL, options);
-        const json = await response.json();
-        return json.data;
-    }
-    catch (e) {
-        console.log(e);
-        return false;
-    }
-};
-
 
 const fetchCard = async (search, ul, loader) => {
     try {
@@ -62,7 +41,7 @@ const getEntries = async (list, loader) =>{
         for(let i = 0; i < list.length; i++) {
             const response = await fetch(apiURLe + '?id=' + JSON.stringify(list[i]));
             const json = await response.json();
-            sendList.push(json[0]);
+            sendList.push({card: json[0], amount: list[i].amount});
         }
         loader.classList.remove('fadeIn');
 
@@ -74,35 +53,37 @@ const getEntries = async (list, loader) =>{
 };
 
 const sendEntries = async (name, entries, loader) => {
+    console.log(entries);
     try {
         const Cuser = await checkUser();
         let a;
         const list =[];
         for(let i = 0; i < entries.length; i++) {
             const pwr = () =>{
-                if(entries[i].power === undefined){
+                if(entries[i].card.power === undefined){
                     return ''
                 } else{
-                    return entries[i].power}};
+                    return entries[i].card.power}};
             const tgh = () =>{
-              if(entries[i].toughness === undefined){
+              if(entries[i].card.toughness === undefined){
                   return ''
               } else{
-                  return entries[i].toughness}};
+                  return entries[i].card.toughness}};
             a = {
-                name: entries[i].name,
-                cmc: entries[i].cmc,
-                colors: entries[i].colors,
-                types: entries[i].types,
-                subtypes: entries[i].subtypes,
+                name: entries[i].card.name,
+                cmc: entries[i].card.cmc,
+                colors: entries[i].card.colors,
+                types: entries[i].card.types,
+                subtypes: entries[i].card.subtypes,
                 power: pwr(),
                 toughness: tgh(),
-                imageUrl: entries[i].imageUrl,
-                cid: entries[i].cid
+                imageUrl: entries[i].card.imageUrl,
+                cid: entries[i].card.cid
             };
 
-            list.push(a);
+            list.push({card: a, amount: entries[i].amount});
         }
+        console.log('list', list);
         const location = window.location.pathname.split('/');
 
         const variables = {
@@ -110,33 +91,34 @@ const sendEntries = async (name, entries, loader) => {
             name: name,
             cover: CID,
             cards: list,
-            user: Cuser.username
+            user: Cuser.id
         };
-
+        console.log('variables', variables);
         const query = {
-            query: ` mutation ( $id: ID!, $name: String!, $cover: String!, $cards: [modifyCards!]!, $user: String!)
+            query: ` mutation ( $id: ID!, $name: String!, $cover: String!, $cards: [modifyCards!]!, $user: ID!)
             {
               modifyDeck(
               id: $id,
               name: $name,
               cover: $cover,
-              cards: $cards,
-              user: $user,
+              cards: $cards
+              user: $user
               )
               {
                 id
                 name
                 cover
                 cards{
-                name
+                card{
+                  name
                 }
-                
+                  amount
+                } 
               }
-            }
+            } 
             `,
             variables: JSON.stringify(variables)
         };
-            console.log('send entries query', query.variables);
             loader.classList.toggle('fadeIn');
             const response = await fetchGraphql(query);
             console.log(response);
@@ -149,45 +131,66 @@ const sendEntries = async (name, entries, loader) => {
     }
 };
 
-const currentDeck = async () =>{
+const currentDeck = async () => {
     const location = window.location.pathname.split('/');
     const query = {
-        query: ` {
-  deck(id: "${location[2]}")
-  {
+        query: `{
+  deck(id: "${location[2]}"){
     id
     name
     cover
     cards{
-    name
-    cid
+        card{
+            id
+            name
+            cmc
+            colors
+            types
+            subtypes
+            power
+            toughness
+            imageUrl
+            cid
+        }
+        amount
     }
     
   }
 }
 `,
     };
-    const result = await fetchGraphql(query);
-    return result
+    try {
+        const result = await fetchGraphql(query);
+        return result
+    }
+    catch(e){
+        console.log(e);
+    }
 };
 
-const currentCards = () =>{
-    const currents = currentDeck().cards;
+
+const currentCards = async() =>{
+    const temp = await currentDeck();
+    const currents = temp.deck.cards;
     if(currents === undefined){
         ulE.innerHTML = '';
     }
     else{
         for(let i = 0; i < currents.length; i++) {
-            ulE.innerHTML += `<li><a class="modF" id="${currents[i].card.id}">${currents[i].amount} + 'x' +${currents[i].card.name}</a></li>`;
-            entryList.push({id: currents.card.id, amount: currents[i].amount});
+            ulE.innerHTML += `<li><a class="modF" id="${currents[i].card.id}">${currents[i].amount}x ${currents[i].card.name}</a></li>`;
+            sendList.push({card: currents[i].card, amount: currents[i].amount});
         }
     }
 
 };
-currentCards();
+
+window.addEventListener('load', async (event) =>{
+    await currentCards();
+});
 
 let picker1;
 let picker2;
+let picker3;
 let CID;
 
 ulCa.onclick = (event) =>{
@@ -197,9 +200,8 @@ ulCa.onclick = (event) =>{
 };
 
 document.getElementById('addB').onclick = () =>{
-    const no = document.getElementById('amountI');
-    entryList.push({id: picker1.id, amount: no.value});
-    ulE.innerHTML += `<li><a class="modF">${picker1.name}</a></li>`;
+    entryList.push({id: picker1.id, amount: parseInt(cardAmount.value)});
+    ulE.innerHTML += `<li><a class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
 };
 
 ulCo.onclick = (event) =>{
@@ -214,6 +216,19 @@ document.getElementById('addC').onclick = async () =>{
     CID = await fetchCard(picker2.name, ulCo, loader3);
     CID = CID[0].URL;
 };
+
+ulE.onclick = (event) =>{
+    event.target.classList.toggle('hide');
+    let entry = {id: event.target.id};
+    for(let i = 0; i < sendList.length; i++){
+        if(sendList[i].card.id === entry.id){
+            sendList.splice(i, 1);
+        }
+    }
+
+};
+
+
 
 sform.addEventListener("submit", async (evt) => {
     evt.preventDefault();
