@@ -1,6 +1,6 @@
 'use strict';
 
-const modify = `http://localhost:3000/modify/`;
+const modify = `https://env-4077056.jelastic.metropolia.fi/modify/`;
 const editButton = document.getElementById('goEdit');
 const deleteButton = document.getElementById('delD');
 const ul = document.getElementById('cardGrid');

@@ -1,7 +1,7 @@
 'use strict';
 
-const modify = `http://localhost:3000/modify/`;
-const single = `http://localhost:3000/single/`;
+const modify = `https://env-4077056.jelastic.metropolia.fi/modify/`;
+const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
 const nform = document.getElementById('newDeck');
 const bar = document.getElementById('create');
 const ul = document.getElementById('decklist');

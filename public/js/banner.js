@@ -1,7 +1,7 @@
 'use strict';
 
-const apiURL = 'http://localhost:3000/graphql';
-const profile = `http://localhost:3000/profile/`;
+const apiURL = 'https://env-4077056.jelastic.metropolia.fi/graphql';
+const profile = `https://env-4077056.jelastic.metropolia.fi/profile/`;
 const token = localStorage.getItem('token');
 const logb = document.getElementById('logB');
 const nav = document.getElementById('navbar');

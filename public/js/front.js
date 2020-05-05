@@ -1,6 +1,6 @@
 'use strict';
 
-const single = `http://localhost:3000/single/`;
+const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
 const ul = document.getElementById('decklist');
 
 const getEvery = async () =>{
