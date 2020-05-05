@@ -19,6 +19,7 @@ html,
 
 .nav {
     list-style-type: none;
+    border-bottom: #FFffff solid 2px;
     margin-bottom: -4px;
     margin-left: 0;
     padding: 0;
@@ -69,8 +70,39 @@ html,
     text-align: center;
 }
 
+.bgL {
+    overflow: auto;
+    padding: 1rem;
+    text-align: center;
+    background-color: #826052;
+    border: #bbbbbb 3px solid;
+}
+
+
+.standardB{
+    height: 35px;
+    border: #FFffff 2px solid;
+    background-color: #1c6aa6;
+    color: #FFffff;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.bg1 {
+    overflow: auto;
+    padding: 1rem;
+    text-align: center;
+    background-color: #FFffff;
+}
+
 .DeckName{
     font-size: 20px;
+    position: relative;
+    display: block;
+    color: #FFffff;
+    height: 350px;
+    width: 250px;
+    text-align: center;
 }
 #hold{
     column-width: 250px;
@@ -82,10 +114,6 @@ html,
 
 }
 
-#wrapper{
-    background-color: #606d82;
-    width: 100%;
-}
 
 #DeckName{
     color: #FFffff;
@@ -124,6 +152,23 @@ html,
     display: inline;
     margin-bottom: 20px;
     border: 2px solid black;
+}
+.inputBar {
+    height: 50px;
+    width: 400px;
+    font-size: 20px;
+    display: inline;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+.searchB{
+    height: 50px;
+    width: 100px;
+    font-size: 20px;
+    border: #FFffff 2px solid;
+    background-color: #1c6aa6;
+    color: #FFffff;
 }
 
 #loginform {
@@ -180,21 +225,59 @@ ul {
     display: inline-grid;
 }
 .CL{
+    position: relative;
+    display: block;
     color: #FFffff;
+    height: 350px;
+    width: 250px;
+    text-align: center;
 }
 .CLBG{
-   background-color:#828282;
-    opacity: 80%;
-    height: 350px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+.singles{
+    height: 310px;
+    width: 223px;
 }
 
 #decklist{
-    grid-template-columns: repeat(5, 250px);
-    grid-template-rows: repeat(5, 250px);
+    border: #FFffff 3px solid;
+    background-color: #826052;
+    grid-template-columns: repeat(5, 350px);
 }
+
+#wrapper{
+    width: 100%;
+    background-color: #826052;
+    border: #FFffff 3px solid;
+}
+
 #cardGrid{
-    grid-template-columns: repeat(5, 250px);
-    grid-template-rows: repeat(3, 250px);
+    border: #FFffff 3px solid;
+    background-color: #826052;
+    grid-template-columns: repeat(5, 350px);
+}
+
+#cardL{
+    border: #FFffff 3px solid;
+    background-color: #333333;
+    grid-template-columns: repeat(5, 350px);
+}
+.deckInfo{
+    color: #FFffff;
+    background-color: #333333;
+    height: 50px;
+    font-size: 20px;
+}
+#coverImage{
+    margin-bottom: 15px;
+}
+
+#colors{
+    border-top: #FFffff 2px solid;
+    padding-top: 10px;
 }
 
 .LWrapper {

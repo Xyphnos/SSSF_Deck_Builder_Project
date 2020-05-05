@@ -78,14 +78,6 @@ const deckType = new GraphQLObjectType({
     }),
 });
 
-const inputCards = new GraphQLInputObjectType({
-   name: 'inputCards',
-    fields: () =>({
-        card: {type: new GraphQLNonNull(inputCard)},
-        amount: {type: new GraphQLNonNull(GraphQLInt)},
-    }),
-});
-
 
 const inputCard = new GraphQLInputObjectType({
     name: 'inputCard',
@@ -202,7 +194,6 @@ const Mutation = new GraphQLObjectType({
                 user: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve: async (parent, args, {req, res}) => {
-                console.log('asdasdasdasdasdasdasdasdasddadadasd');
                 try {
                     await authController.checkAuth(req, res);
                     let newDeck = new deck({
@@ -249,11 +240,13 @@ const Mutation = new GraphQLObjectType({
                 user: {type: GraphQLID},
             },
             resolve: async (parent, args, {req, res}) => {
-                console.log('asdsadasdasdasdsdsadasdasddsadasdasdasdasdadasdadasdasdasdasdas');
                 try {
-                    //await authController.checkAuth(req, res);
-                    const cards = await Promise.all(args.cards.map(async card1 => {
-                        const result = await card.find({cid: card1.card.cid});
+                    await authController.checkAuth(req, res);
+                    const thisU = await user.findById(args.user);
+                    const thisD = await deck.findById(args.id);
+                    if(thisU._id === thisD.user) {
+                        const cards = await Promise.all(args.cards.map(async card1 => {
+                            const result = await card.find({cid: card1.card.cid});
                             if (result[0] === undefined) {
                                 let newCard = new card(card1.card);
                                 const res = await newCard.save();
@@ -261,19 +254,24 @@ const Mutation = new GraphQLObjectType({
                             } else {
                                 return {_id: result[0]._id, amount: card1.amount}
                             }
-                    }));
+                        }));
 
 
-                    let modifiedDeck = {
-                        name: args.name,
-                        cover: args.cover,
-                        cards: cards,
-                        user: args.user,
-                    };
-                    const asd =  await deck.findByIdAndUpdate(args.id, modifiedDeck,
-                        {new: true});
-                    console.log(asd);
-                    return asd
+                        let modifiedDeck = {
+                            name: args.name,
+                            cover: args.cover,
+                            cards: cards,
+                            user: args.user,
+                        };
+                        const asd =  await deck.findByIdAndUpdate(args.id, modifiedDeck,
+                            {new: true});
+                        console.log(asd);
+                        return asd
+                    }
+                    else{
+                        console.log('Incorrect user/deck id pairing');
+                        return
+                    }
                 }
                 catch (err) {
                     throw new Error(err);

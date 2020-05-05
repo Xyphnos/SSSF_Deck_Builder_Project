@@ -15,9 +15,10 @@
             const json = await response.json();
             console.log(json);
             for( let i = 0; i < json.length; i++) {
-                ul.innerHTML += `<li><p>${json[i].name}</p><img src=${json[i].URL}></li>`;
+                ul.innerHTML += `<li class="CLBG">
+<a class="CL">${json[i].name}<img class="singles" src=${json[i].URL}></a></li>`;
             }
-            loader.classList.toggle('fadeOut');
+            loader.classList.remove('fadeIn')
 
         } catch (e) {
             console.error('test ', e);

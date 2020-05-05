@@ -2,6 +2,7 @@
 
 const apiURLu = 'http://localhost:3000/cardSearch';
 const apiURLe = 'http://localhost:3000/cardSearch/entries';
+const single = `http://localhost:3000/single/`;
 const input = document.getElementById('input');
 const inputC = document.getElementById('inputC');
 const search = document.getElementById('search');
@@ -53,7 +54,10 @@ const getEntries = async (list, loader) =>{
 };
 
 const sendEntries = async (name, entries, loader) => {
-    console.log(entries);
+    if(CID === undefined){
+        CID = await currentDeck();
+        CID = CID.deck.cover;
+    }
     try {
         const Cuser = await checkUser();
         let a;
@@ -201,7 +205,7 @@ ulCa.onclick = (event) =>{
 
 document.getElementById('addB').onclick = () =>{
     entryList.push({id: picker1.id, amount: parseInt(cardAmount.value)});
-    ulE.innerHTML += `<li><a class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
+    ulE.innerHTML += `<li><a id="${picker1.id}" class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
 };
 
 ulCo.onclick = (event) =>{
@@ -225,6 +229,12 @@ ulE.onclick = (event) =>{
             sendList.splice(i, 1);
         }
     }
+    for(let i = 0; i < entryList.length; i++){
+        console.log(entryList[0].id, entry.id);
+        if(entryList[i].id === entry.id){
+            entryList.splice(i, 1);
+        }
+    }
 
 };
 
@@ -239,15 +249,19 @@ sform.addEventListener("submit", async (evt) => {
 
 saveForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const location = window.location.pathname.split('/');
     let name;
-    if(newName.value == null){
-        name = await currentDeck().deck.name;
+    if(newName.value === ''){
+        name = await currentDeck();
+        name = name.deck.name;
     }
     else{
         name = newName.value;
     }
+    console.log(name);
     await getEntries(entryList, loader2);
     await sendEntries(name, sendList, loader2);
+    window.location = window.location.href = single + `${location[2]}`
 });
 
 cform.addEventListener("submit", async (event) => {
