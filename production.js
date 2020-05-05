@@ -1,5 +1,6 @@
 'use strict';
-module.exports=(app, httpPort) => {
+
+module.exports=(app, db, httpPort) => {
     app.enable('trust proxy');
 
     app.use ((req, res, next) => {
@@ -9,5 +10,9 @@ module.exports=(app, httpPort) => {
             res.redirect(`https://${req.headers.host}${req.url}`);
         }
     });
+    db.on("connected", () => {
     app.listen(httpPort);
+    });
 };
+
+
