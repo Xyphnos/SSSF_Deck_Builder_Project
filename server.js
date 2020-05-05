@@ -26,13 +26,13 @@ app.use(express.json());
 app.use('/public',express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-
+/*
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 if (process.env.NODE_ENV === 'production') {
     require('./production')(app, process.env.PORT);
 } else {
     require('./localhost')(app, process.env.PORT);
-}
+}*/
 
 
 app.use('/cardSearch', searchRoute);
@@ -49,4 +49,7 @@ app.use('/graphql', (req, res) => {
         graphiql: true,
         context: {req, res}})
     (req, res);
+});
+http.listen(3000, () => {
+    console.log('listening on port 3000');
 });
