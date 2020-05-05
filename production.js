@@ -10,9 +10,7 @@ module.exports=(app, httpPort) => {
             res.redirect(`https://${req.headers.host}${req.url}`);
         }
     });
-    db.on("connected", () => {
     app.listen(httpPort);
-    });
 };
 
 
