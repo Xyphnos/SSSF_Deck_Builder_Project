@@ -4,14 +4,16 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
+const fs = require('fs');
 const app = express();
 const http = require('http').createServer(app);
+
 const graphQlHttp = require('express-graphql');
 const schema = require('./schema/schema');
-
-const db = require('./database/db');
-const searchRoute = require('./routes/searchRoute');
 const passport = require('./utils/pass');
+const db = require('./database/db');
+
+const searchRoute = require('./routes/searchRoute');
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const deckRoute = require('./routes/deckRoute');
@@ -27,6 +29,14 @@ app.use('/public',express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+if (process.env.NODE_ENV === 'production') {
+    require('./production')(app, process.env.PORT);
+} else {
+    require('./localhost')(app, process.env.HTTPS_PORT, process.env.HTTP_PORT);
+}
+
+
 app.use('/cardSearch', searchRoute);
 app.use('/decks', deckRoute);
 app.use('/user', userRoute);
@@ -34,12 +44,11 @@ app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
 app.use('/modify', modRoute);
 app.use('/single', singleRoute);
+
 app.use('/graphql', (req, res) => {
-    graphQlHttp({schema, graphiql: true, context: {req, res}})(req,
-        res);
-});
-
-
-http.listen(3000, () => {
-    console.log('listening on port 3000');
+    graphQlHttp({
+        schema,
+        graphiql: true,
+        context: {req, res}})
+    (req, res);
 });
