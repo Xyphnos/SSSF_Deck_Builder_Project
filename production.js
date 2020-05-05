@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports=(app, db, httpPort) => {
+module.exports=(app, httpPort) => {
     app.enable('trust proxy');
 
     app.use ((req, res, next) => {

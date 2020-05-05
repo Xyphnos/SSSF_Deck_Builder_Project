@@ -29,9 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 if (process.env.NODE_ENV === 'production') {
-    require('./production')(app, db, process.env.PORT);
+    require('./production')(app, process.env.PORT);
 } else {
-    require('./localhost')(app, db, process.env.PORT);
+    require('./localhost')(app, process.env.PORT);
 }
 
 
