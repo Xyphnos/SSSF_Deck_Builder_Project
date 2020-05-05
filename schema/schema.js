@@ -241,10 +241,11 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: async (parent, args, {req, res}) => {
                 try {
+
                     await authController.checkAuth(req, res);
                     const thisU = await user.findById(args.user);
                     const thisD = await deck.findById(args.id);
-                    if(thisU._id === thisD.user) {
+                    if(thisU.id === thisD.user) {
                         const cards = await Promise.all(args.cards.map(async card1 => {
                             const result = await card.find({cid: card1.card.cid});
                             if (result[0] === undefined) {
@@ -270,7 +271,6 @@ const Mutation = new GraphQLObjectType({
                     }
                     else{
                         console.log('Incorrect user/deck id pairing');
-                        return
                     }
                 }
                 catch (err) {
@@ -290,14 +290,13 @@ const Mutation = new GraphQLObjectType({
                     await authController.checkAuth(req, res);
                     const thisU = await user.findById(args.user);
                     const thisD = await deck.findById(args.id);
-                    if(thisU._id === thisD.user) {
+                    if(thisU.id === thisD.user) {
                         const result = await deck.findByIdAndDelete(args.id);
                         console.log('delete result', result);
                         return result;
                     }
                     else{
                         console.log('Incorrect user/deck id pairing');
-                        return
                     }
                 }
                 catch (err) {

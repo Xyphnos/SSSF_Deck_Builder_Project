@@ -3,7 +3,7 @@
     const apiURLu = 'http://localhost:3000/cardSearch';
     const input = document.getElementById('input');
     const search = document.getElementById('search');
-    const ul = document.getElementById('cardL');
+    const ul = document.getElementById('cardSL');
     const form = document.getElementById('searchForm');
     const loader = document.getElementById('loader-wrapper');
 

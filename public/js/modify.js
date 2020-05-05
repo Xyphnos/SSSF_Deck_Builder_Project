@@ -258,7 +258,6 @@ saveForm.addEventListener("submit", async (event) => {
     else{
         name = newName.value;
     }
-    console.log(name);
     await getEntries(entryList, loader2);
     await sendEntries(name, sendList, loader2);
     window.location = window.location.href = single + `${location[2]}`

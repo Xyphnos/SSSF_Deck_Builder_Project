@@ -104,24 +104,23 @@ html,
     width: 250px;
     text-align: center;
 }
+#DeckName{
+    color: #FFffff;
+}
 #hold{
     column-width: 250px;
     column-count: 1;
     float: right;
     display: block;
-    margin-right: 100px;
-    width: 300px;
+    margin-right: 20px;
+    max-width: 20%;
 
-}
-
-
-#DeckName{
-    color: #FFffff;
 }
 
 #bg23{
     float: left;
-    margin-left: 100px;
+    max-width: 0%;
+    margin-left: 20px;
 }
 
 #bg1 {
@@ -233,7 +232,8 @@ ul {
     text-align: center;
 }
 .CLBG{
-    display: flex;
+    flex: 20%;
+    max-width: 15%;
     height: 100%;
     width: 100%;
 }
@@ -248,23 +248,32 @@ ul {
     grid-template-columns: repeat(5, 350px);
 }
 
+#wrap{
+    width: 100%;
+}
+
 #wrapper{
+    float: right;
     width: 100%;
     background-color: #826052;
     border: #FFffff 3px solid;
 }
 
 #cardGrid{
+    float: left;
+    display: flex;
+    flex-wrap: wrap;
     border: #FFffff 3px solid;
     background-color: #826052;
-    grid-template-columns: repeat(5, 350px);
 }
 
-#cardL{
+#cardSL{
+    display: flex;
+    flex-wrap: wrap;
     border: #FFffff 3px solid;
     background-color: #333333;
-    grid-template-columns: repeat(5, 350px);
 }
+
 .deckInfo{
     color: #FFffff;
     background-color: #333333;
