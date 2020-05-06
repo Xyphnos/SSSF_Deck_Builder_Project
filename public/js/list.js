@@ -7,6 +7,7 @@
     const form = document.getElementById('searchForm');
     const loader = document.getElementById('loader-wrapper');
 
+    //send the searched card name to the third party API as a query
     const fetchCard = async (search) => {
         try {
             loader.classList.toggle('fadeIn');
@@ -14,6 +15,7 @@
             console.log(response);
             const json = await response.json();
             console.log(json);
+            //create the elements for the card images
             for( let i = 0; i < json.length; i++) {
                 ul.innerHTML += `<li class="CLBG">
 <a class="CL">${json[i].name}<img class="singles" src=${json[i].URL}></a></li>`;

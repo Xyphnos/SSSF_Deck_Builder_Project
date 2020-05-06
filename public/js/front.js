@@ -3,6 +3,7 @@
 const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
 const ul = document.getElementById('decklist');
 
+//get all the decks from database
 const getEvery = async () =>{
     try{
         const query = {
@@ -27,12 +28,14 @@ const getEvery = async () =>{
         const json = await result.decks;
         console.log(json);
         let limit;
+        //limit the amount of decks to 15
         if(json.length < 15){
             limit = json.length;
         }
         else{
             limit = 15;
         }
+        //create elements for the decks on the home page
         for( let i = 0; i < limit; i++) {
             ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
         }

@@ -20,7 +20,8 @@ const newName = document.getElementById('renameInput');
 const entryList =[];
 const sendList = [];
 
-//sends a request to the third party API for cards with the searched input
+
+//send a request to the third party API for card names and id's with the searched input
 const fetchCard = async (search, ul, loader) => {
     try {
         loader.classList.toggle('fadeIn');
@@ -37,7 +38,8 @@ const fetchCard = async (search, ul, loader) => {
     }
 };
 
-//also sends a request to the third party API
+
+//send a request to the third party API and return all the required info to make a card entry in graphql
 const getEntries = async (list, loader) =>{
     try {
         loader.classList.toggle('fadeIn');
@@ -55,10 +57,12 @@ const getEntries = async (list, loader) =>{
     }
 };
 
+//make a list of json arrays for variables
 const createList = (entries) =>{
     let a;
     const list =[];
     for(let i = 0; i < entries.length; i++) {
+        //some cards dont have power and toughness but they are needed in db so just make them empty strings
         const pwr = () =>{
             if(entries[i].card.power === undefined){
                 return ''
@@ -86,15 +90,21 @@ const createList = (entries) =>{
     return list
 };
 
+
+//send the modify request
 const sendEntries = async (name, entries, loader) => {
+    //if no new cover image is given, use the old one
     if(CID === undefined){
         CID = await currentDeck();
         CID = CID.deck.cover;
     }
     try {
+        //create a list to be set
         const list = await createList(entries);
+        //get info of current user
         const Cuser = await checkUser();
         console.log('list', list);
+        //get the current deck id by splitting it form the url
         const location = window.location.pathname.split('/');
 
         const variables = {
@@ -142,6 +152,7 @@ const sendEntries = async (name, entries, loader) => {
     }
 };
 
+//get the current deck and its cards
 const currentDeck = async () => {
     const location = window.location.pathname.split('/');
     const query = {
@@ -179,16 +190,19 @@ const currentDeck = async () => {
     }
 };
 
-
+//get only the cards from the deck
 const currentCards = async() =>{
     const temp = await currentDeck();
     const currents = temp.deck.cards;
+    //check if deck has cards
     if(currents === undefined){
         ulE.innerHTML = '';
     }
     else{
         for(let i = 0; i < currents.length; i++) {
+            //add cards to the list on the page
             ulE.innerHTML += `<li><a class="modF" id="${currents[i].card.id}">${currents[i].amount}x ${currents[i].card.name}</a></li>`;
+            //add cards to the list that gets sent to backend
             sendList.push({card: currents[i].card, amount: currents[i].amount});
         }
     }
@@ -201,9 +215,9 @@ window.addEventListener('load', async (event) =>{
 
 let picker1;
 let picker2;
-let picker3;
 let CID;
 
+//get the picked card from the list of searched cards
 ulCa.onclick = (event) =>{
     event.target.classList.toggle('active');
     let entry = {name: event.target.innerText, id: event.target.id};
@@ -211,10 +225,13 @@ ulCa.onclick = (event) =>{
 };
 
 document.getElementById('addB').onclick = () =>{
+    //add card id and amount to the list to be sent to backend
     entryList.push({id: picker1.id, amount: parseInt(cardAmount.value)});
+    //add card to the middle list for the user to see
     ulE.innerHTML += `<li><a id="${picker1.id}" class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
 };
 
+//get the picked cover card
 ulCo.onclick = (event) =>{
     event.target.classList.toggle('active');
     let entry = {name: event.target.innerText, id: event.target.id};
@@ -222,15 +239,20 @@ ulCo.onclick = (event) =>{
 };
 
 document.getElementById('addC').onclick = async () =>{
+    //empty the searches
     ulCo.innerHTML = '';
     ulCo.innerHTML += `<p>your current cover card is</p>`;
+    //get the card from backend
     CID = await fetchCard(picker2.name, ulCo, loader3);
     CID = CID[0].URL;
 };
 
+//remove cards from the list thatt gets sent to backend
 ulE.onclick = (event) =>{
+    //hides clicked entry from user
     event.target.classList.toggle('hide');
     let entry = {id: event.target.id};
+    //check if card was already in the deck when loaded or if it was just added
     for(let i = 0; i < sendList.length; i++){
         if(sendList[i].card.id === entry.id){
             sendList.splice(i, 1);
@@ -246,7 +268,7 @@ ulE.onclick = (event) =>{
 };
 
 
-
+//search form submit events
 sform.addEventListener("submit", async (evt) => {
     evt.preventDefault();
     ulCa.innerHTML = '';
@@ -254,10 +276,12 @@ sform.addEventListener("submit", async (evt) => {
     await fetchCard(que, ulCa, loader1);
 });
 
+//save form submit events
 saveForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const location = window.location.pathname.split('/');
     let name;
+    //check if user gave a new name, if not use the old one
     if(newName.value === ''){
         name = await currentDeck();
         name = name.deck.name;
@@ -270,10 +294,10 @@ saveForm.addEventListener("submit", async (event) => {
     window.location = window.location.href = single + `${location[2]}`
 });
 
+//cover form submit events
 cform.addEventListener("submit", async (event) => {
     event.preventDefault();
     ulCo.innerHTML = '';
     const que = inputC.value;
     await fetchCard(que, ulCo, loader3);
 });
-

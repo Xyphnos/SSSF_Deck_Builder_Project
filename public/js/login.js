@@ -3,7 +3,7 @@
 const form = document.getElementById('loginform');
 const form2 = document.getElementById('registerform');
 
-
+//send the login query
 const login = async (evt) => {
     evt.preventDefault();
     const uName = document.getElementById('username');
@@ -34,6 +34,7 @@ const login = async (evt) => {
     }
 };
 
+//register a user
 const register = async (evt) => {
     evt.preventDefault();
     const nUser = document.getElementById('usernameR');
@@ -41,6 +42,7 @@ const register = async (evt) => {
     const cPwd = document.getElementById('passwordRS');
     const email = document.getElementById('email');
     const warn = document.getElementById('matchWarning');
+    //check that passwords match
     const pwdCheck = () =>{
         if(nPwd.value === cPwd.value){
             return nPwd
@@ -63,6 +65,7 @@ const register = async (evt) => {
         const result = await fetchGraphql(query);
         console.log(result);
         localStorage.setItem('token', result.registerUser.token);
+        //redirect user to their profile
         window.location.href = `${profile + nUser.value}`
     }
     catch (e) {

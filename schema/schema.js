@@ -22,6 +22,7 @@ const deck = require('../models/deck');
 const card = require('../models/card');
 const user = require('../models/user');
 
+//Basic types
 
 const cardType = new GraphQLObjectType({
     name: 'card',
@@ -36,19 +37,6 @@ const cardType = new GraphQLObjectType({
         toughness: {type: GraphQLString},
         imageUrl: {type: GraphQLString},
         cid: {type: GraphQLString},
-    }),
-});
-
-const cardEntry = new GraphQLObjectType({
-    name: 'cardEntry',
-    fields: () => ({
-        card: {
-            type: cardType,
-            resolve(parent, args) {
-                return card.findById(parent._id);
-            },
-        },
-        amount: {type: GraphQLInt},
     }),
 });
 
@@ -75,6 +63,21 @@ const deckType = new GraphQLObjectType({
         cover: {type: GraphQLString},
         cards: {type: GraphQLList(cardEntry)},
         user: {type: GraphQLString},
+    }),
+});
+
+//Objects for mutations
+
+const cardEntry = new GraphQLObjectType({
+    name: 'cardEntry',
+    fields: () => ({
+        card: {
+            type: cardType,
+            resolve(parent, args) {
+                return card.findById(parent._id);
+            },
+        },
+        amount: {type: GraphQLInt},
     }),
 });
 
@@ -245,6 +248,7 @@ const Mutation = new GraphQLObjectType({
                     await authController.checkAuth(req, res);
                     const thisU = await user.findById(args.user);
                     const thisD = await deck.findById(args.id);
+                    //this is here to check that only the user that owns the deck can modify it
                     if(thisU.id === thisD.user) {
                         const cards = await Promise.all(args.cards.map(async card1 => {
                             const result = await card.find({cid: card1.card.cid});
@@ -290,6 +294,7 @@ const Mutation = new GraphQLObjectType({
                     await authController.checkAuth(req, res);
                     const thisU = await user.findById(args.user);
                     const thisD = await deck.findById(args.id);
+                    //this is here to stop users from deleting other users decks
                     if(thisU.id === thisD.user) {
                         const result = await deck.findByIdAndDelete(args.id);
                         console.log('delete result', result);

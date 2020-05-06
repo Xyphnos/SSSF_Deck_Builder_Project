@@ -2,7 +2,23 @@
 
 const mtg = require('mtgsdk');
 
+//since duplicate/unwanted entries sometimes make it to the database, this function will filter the duplicate names and cards with no image
+const cards = (list) =>{
+    const entries = [];
+    const dupecheck = [];
+    const le = list.length;
 
+    for(let i = 0; i < le; i++){
+        if(dupecheck.includes(list[i].name) === false && list[i].imageUrl !== undefined) {
+            dupecheck.push(list[i].name);
+            entries.push({name: list[i].name, URL: list[i].imageUrl, id: list[i].id})
+        }
+    }
+    return entries
+};
+
+
+//function to search cards by name user has provided and return image, name, and id
 const cardSearch = async (req, res) => {
 
     try {
@@ -14,33 +30,8 @@ const cardSearch = async (req, res) => {
         if(name !==  undefined) {
             name = JSON.parse(name);
         }
-        if(id !==  undefined) {
-            id = JSON.parse(id);
-        }
-
-        /*
-        const card = await mtg.card.find(id)
-            .then(result => {
-                return result.card
-            });
-         */
 
         const card = await mtg.card.where({ name: name});
-
-
-        const cards = (list) =>{
-            const entries = [];
-            const dupecheck = [];
-            const le = list.length;
-
-            for(let i = 0; i < le; i++){
-                if(dupecheck.includes(list[i].name) === false && list[i].imageUrl !== undefined) {
-                    dupecheck.push(list[i].name);
-                    entries.push({name: list[i].name, URL: list[i].imageUrl, id: list[i].id})
-                }
-            }
-            return entries
-        };
 
         res.json(cards(card))
     }
@@ -49,6 +40,7 @@ const cardSearch = async (req, res) => {
     }
 };
 
+//function to search cards by id and return all the info to add to database
 const entrySearch = async (req, res) => {
     try {
         const query = req.query;
@@ -58,38 +50,7 @@ const entrySearch = async (req, res) => {
             id = JSON.parse(id);
         }
 
-        /*
-        const card = await mtg.card.find(id)
-            .then(result => {
-                return result.card
-            });
-         */
-
         const card = await mtg.card.where({ id: id.id});
-
-        const cards = (list) =>{
-            const entries = [];
-            const dupecheck = [];
-            const le = list.length;
-
-            for(let i = 0; i < le; i++){
-                if(dupecheck.includes(list[i].name) === false && list[i].imageUrl !== undefined) {
-                    dupecheck.push(list[i].name);
-                    entries.push({
-                        name: list[i].name,
-                        cmc: list[i].cmc,
-                        colors: list[i].colors,
-                        types: list[i].types,
-                        subtypes: list[i].subtypes,
-                        power: list[i].power,
-                        toughness: list[i].toughness,
-                        imageUrl: list[i].imageUrl,
-                        cid: list[i].id,
-                    })
-                }
-            }
-            return entries
-        };
 
         res.json(cards(card))
     }

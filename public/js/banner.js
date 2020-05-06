@@ -6,6 +6,7 @@ const token = localStorage.getItem('token');
 const logb = document.getElementById('logB');
 const nav = document.getElementById('navbar');
 
+//graphql fetch
 const fetchGraphql = async (query) => {
     const options = {
         method: 'POST',
@@ -27,6 +28,7 @@ const fetchGraphql = async (query) => {
     }
 };
 
+//check who is the current user
 const checkUser = async () => {
     const query = {
         query: ` {
@@ -58,6 +60,7 @@ const checkUser = async () => {
     }
 };
 
+//check if there is a current user, hide the login button and add logout and profile buttons if there is
 const checkState = async() =>{
     let ifCheck = await checkUser();
     if(ifCheck){

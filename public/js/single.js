@@ -9,7 +9,7 @@ const coverImage = document.getElementById('coverD');
 const colors = document.getElementById('colors');
 const cmc = document.getElementById('cmc');
 
-
+//get the deck that user is currently in
 const currentDeck = async () => {
     const location = window.location.pathname.split('/');
     const query = {
@@ -46,6 +46,7 @@ const currentDeck = async () => {
     }
 };
 
+//delete the current deck, only works if the user.deck.id and deck.user.id match
 const deleteDeck = async (user) =>{
     const location = window.location.pathname.split('/');
     const query = {
@@ -61,6 +62,7 @@ const deleteDeck = async (user) =>{
     return result
 };
 
+//get the cards of current deck
 const getCards = async () =>{
     const check =  await currentDeck();
     try{
@@ -77,7 +79,7 @@ const getCards = async () =>{
     }
 };
 
-
+//calculates the average mana cost of the nonland cards and gets all the colors from cards
 const CMCC = async () =>{
   const current = await currentDeck();
   const clist = current.deck.cards;
@@ -85,23 +87,29 @@ const CMCC = async () =>{
   let cmcArray = [];
   let colorArray = [];
   let nonland = 0;
+    //repeat for the amount unique of cards
   for(let i = 0; i < clist.length; i++){
       let types = clist[i].card.types;
+      //check if the card is a land or not
       for(let i = 0; i < types.length; i++){
           if(types[i] === "Land"){
               TF = false
           }
       }
+      //if not land get the cards amount, mana cost, color, and add the card amount to the amount of nonlands
       if(TF === true){
           cmcArray.push({cmc: clist[i].card.cmc, amount: clist[i].amount});
           colorArray.push(clist[i].card.colors);
           nonland += clist[i].amount;
       }
   }
+    //count the average cost
   const avgCMC = () =>{
       let added = 0;
       let multi = 0;
+      //for amount of unique nonlands
       for(let i = 0; i < cmcArray.length; i++){
+          //add the mana cost multiplied by the cards amount to the variable to be counted later
           multi += cmcArray[i].cmc * cmcArray[i].amount;
           console.log(multi);
       }
@@ -109,8 +117,11 @@ const CMCC = async () =>{
   };
   const colors = () =>{
       let list = [];
+      //for amount of nonlands
       for(let i = 0; i < colorArray.length; i++){
+          //for amount of colors in card
           for(let o = 0; o < colorArray[i].length; o++){
+              //check if color is already in the list of colors
           if(list.includes(colorArray[i][o]) === false){
               list.push(colorArray[i][o])
           }
