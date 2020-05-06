@@ -1,6 +1,6 @@
     'use strict';
 
-    const apiURLu = 'https://env-4077056.jelastic.metropolia.fi/cardSearch';
+    const apiURLu = 'http://localhost:3000/cardSearch';
     const input = document.getElementById('input');
     const search = document.getElementById('search');
     const ul = document.getElementById('cardSL');

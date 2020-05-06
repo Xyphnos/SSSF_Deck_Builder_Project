@@ -1,6 +1,6 @@
 'use strict';
 
-const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
+const single = `http://localhost:3000/single/`;
 const ul = document.getElementById('decklist');
 
 //get all the decks from database

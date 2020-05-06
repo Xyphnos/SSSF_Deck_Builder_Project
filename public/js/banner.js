@@ -1,7 +1,7 @@
 'use strict';
 
-const apiURL = 'https://env-4077056.jelastic.metropolia.fi/graphql';
-const profile = `https://env-4077056.jelastic.metropolia.fi/profile/`;
+const apiURL = 'http://localhost:3000/graphql';
+const profile = `http://localhost:3000/profile/`;
 const token = localStorage.getItem('token');
 const logb = document.getElementById('logB');
 const nav = document.getElementById('navbar');
@@ -72,7 +72,7 @@ const checkState = async() =>{
         logOut.addEventListener('click', (event) =>{
             event.preventDefault();
             localStorage.removeItem('token');
-            window.location.href = 'https://env-4077056.jelastic.metropolia.fi/public/html/index.html';
+            window.location.href = 'http://localhost:3000/public/html/index.html';
         });
     }
 };

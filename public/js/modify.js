@@ -1,8 +1,8 @@
 'use strict';
 
-const apiURLu = 'https://env-4077056.jelastic.metropolia.fi/cardSearch';
-const apiURLe = 'https://env-4077056.jelastic.metropolia.fi/cardSearch/entries';
-const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
+const apiURLu = 'http://localhost:3000/cardSearch';
+const apiURLe = 'http://localhost:3000/cardSearch/entries';
+const single = `http://localhost:3000/single/`;
 const input = document.getElementById('input');
 const inputC = document.getElementById('inputC');
 const search = document.getElementById('search');
