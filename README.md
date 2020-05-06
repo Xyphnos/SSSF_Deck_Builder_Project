@@ -5,7 +5,7 @@ This is my MTG deck builder for a school project
 
 ## Things to note
 
-to run this locally, you want to download the localBranch version, as pBranch version has different urls for jelastic.
+To run this locally, you want to download the localBranch version, as pBranch version has different urls for jelastic.
 
 ### To use
 
