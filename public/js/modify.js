@@ -20,6 +20,7 @@ const newName = document.getElementById('renameInput');
 const entryList =[];
 const sendList = [];
 
+//sends a request to the third party API for cards with the searched input
 const fetchCard = async (search, ul, loader) => {
     try {
         loader.classList.toggle('fadeIn');
@@ -36,6 +37,7 @@ const fetchCard = async (search, ul, loader) => {
     }
 };
 
+//also sends a request to the third party API
 const getEntries = async (list, loader) =>{
     try {
         loader.classList.toggle('fadeIn');
