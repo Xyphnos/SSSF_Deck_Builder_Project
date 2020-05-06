@@ -6,9 +6,9 @@ const single = `https://env-4077056.jelastic.metropolia.fi/single/`;
 const input = document.getElementById('input');
 const inputC = document.getElementById('inputC');
 const search = document.getElementById('search');
-const ulCa = document.getElementById('cardL');
-const ulCo = document.getElementById('coverL');
-const ulE = document.getElementById('info');
+const searchUL = document.getElementById('cardL');
+const coverUL = document.getElementById('coverL');
+const entryUL = document.getElementById('info');
 const sform = document.getElementById('searchForm');
 const cform = document.getElementById('searchCover');
 const saveForm =document.getElementById('saveDeck');
@@ -196,12 +196,12 @@ const currentCards = async() =>{
     const currents = temp.deck.cards;
     //check if deck has cards
     if(currents === undefined){
-        ulE.innerHTML = '';
+        entryUL.innerHTML = '';
     }
     else{
         for(let i = 0; i < currents.length; i++) {
             //add cards to the list on the page
-            ulE.innerHTML += `<li><a class="modF" id="${currents[i].card.id}">${currents[i].amount}x ${currents[i].card.name}</a></li>`;
+            entryUL.innerHTML += `<li><a class="modF" id="${currents[i].card.id}">${currents[i].amount}x ${currents[i].card.name}</a></li>`;
             //add cards to the list that gets sent to backend
             sendList.push({card: currents[i].card, amount: currents[i].amount});
         }
@@ -218,7 +218,7 @@ let picker2;
 let CID;
 
 //get the picked card from the list of searched cards
-ulCa.onclick = (event) =>{
+searchUL.onclick = (event) =>{
     event.target.classList.toggle('active');
     let entry = {name: event.target.innerText, id: event.target.id};
     picker1 = entry;
@@ -228,11 +228,11 @@ document.getElementById('addB').onclick = () =>{
     //add card id and amount to the list to be sent to backend
     entryList.push({id: picker1.id, amount: parseInt(cardAmount.value)});
     //add card to the middle list for the user to see
-    ulE.innerHTML += `<li><a id="${picker1.id}" class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
+    entryUL.innerHTML += `<li><a id="${picker1.id}" class="modF">${cardAmount.value}x ${picker1.name}</a></li>`;
 };
 
 //get the picked cover card
-ulCo.onclick = (event) =>{
+coverUL.onclick = (event) =>{
     event.target.classList.toggle('active');
     let entry = {name: event.target.innerText, id: event.target.id};
     picker2 = entry;
@@ -240,15 +240,15 @@ ulCo.onclick = (event) =>{
 
 document.getElementById('addC').onclick = async () =>{
     //empty the searches
-    ulCo.innerHTML = '';
-    ulCo.innerHTML += `<p>your current cover card is</p>`;
+    coverUL.innerHTML = '';
+    coverUL.innerHTML += `<p>your current cover card is</p>`;
     //get the card from backend
-    CID = await fetchCard(picker2.name, ulCo, loader3);
+    CID = await fetchCard(picker2.name, coverUL, loader3);
     CID = CID[0].URL;
 };
 
 //remove cards from the list thatt gets sent to backend
-ulE.onclick = (event) =>{
+entryUL.onclick = (event) =>{
     //hides clicked entry from user
     event.target.classList.toggle('hide');
     let entry = {id: event.target.id};
@@ -271,9 +271,9 @@ ulE.onclick = (event) =>{
 //search form submit events
 sform.addEventListener("submit", async (evt) => {
     evt.preventDefault();
-    ulCa.innerHTML = '';
+    searchUL.innerHTML = '';
     const que = input.value;
-    await fetchCard(que, ulCa, loader1);
+    await fetchCard(que, searchUL, loader1);
 });
 
 //save form submit events
@@ -297,7 +297,7 @@ saveForm.addEventListener("submit", async (event) => {
 //cover form submit events
 cform.addEventListener("submit", async (event) => {
     event.preventDefault();
-    ulCo.innerHTML = '';
+    coverUL.innerHTML = '';
     const que = inputC.value;
-    await fetchCard(que, ulCo, loader3);
+    await fetchCard(que, coverUL, loader3);
 });
