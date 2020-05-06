@@ -4,7 +4,8 @@ This is my MTG deck builder for a school project
 
 ## Description
 
-This is a website that lets you register as a user and create decks consisting of Magic the Gathering cards of your choosing. The decks will be visible in your personal profile page, and you can update the contents of said decks afterwards as new sets are released, or when you just find new combos to add. Website also has a separate card search which currently works by searching cards by their name
+This is a website that lets you register as a user and create decks consisting of Magic the Gathering cards of your choosing. The decks will be visible in your personal profile page, and you can update the contents of said decks afterwards as new sets are released, or when you just find new combos to add. Website also has a separate card search which currently works by searching cards by their name.
+Card searching is done with magithegathering.io API. Frontend of the project is vanilla html and css, with some ejs files to render the decks and profiles. Backend is a mongodb database that works using node.js, GraphQL and some JWT for authentication.
 
 ## Things to note
 
