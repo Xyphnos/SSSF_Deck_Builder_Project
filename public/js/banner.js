@@ -69,7 +69,7 @@ const checkState = async() =>{
         logOut.addEventListener('click', (event) =>{
             event.preventDefault();
             localStorage.removeItem('token');
-            window.location.href = 'http://localhost:3000/public/html/index.html';
+            window.location.href = 'https://env-4077056.jelastic.metropolia.fi/public/html/index.html';
         });
     }
 };

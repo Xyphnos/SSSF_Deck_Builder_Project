@@ -53,40 +53,45 @@ const getEntries = async (list, loader) =>{
     }
 };
 
+const createList = (entries) =>{
+    let a;
+    const list =[];
+    for(let i = 0; i < entries.length; i++) {
+        const pwr = () =>{
+            if(entries[i].card.power === undefined){
+                return ''
+            } else{
+                return entries[i].card.power}};
+        const tgh = () =>{
+            if(entries[i].card.toughness === undefined){
+                return ''
+            } else{
+                return entries[i].card.toughness}};
+        a = {
+            name: entries[i].card.name,
+            cmc: entries[i].card.cmc,
+            colors: entries[i].card.colors,
+            types: entries[i].card.types,
+            subtypes: entries[i].card.subtypes,
+            power: pwr(),
+            toughness: tgh(),
+            imageUrl: entries[i].card.imageUrl,
+            cid: entries[i].card.cid
+        };
+
+        list.push({card: a, amount: entries[i].amount});
+    }
+    return list
+};
+
 const sendEntries = async (name, entries, loader) => {
     if(CID === undefined){
         CID = await currentDeck();
         CID = CID.deck.cover;
     }
     try {
+        const list = await createList(entries);
         const Cuser = await checkUser();
-        let a;
-        const list =[];
-        for(let i = 0; i < entries.length; i++) {
-            const pwr = () =>{
-                if(entries[i].card.power === undefined){
-                    return ''
-                } else{
-                    return entries[i].card.power}};
-            const tgh = () =>{
-              if(entries[i].card.toughness === undefined){
-                  return ''
-              } else{
-                  return entries[i].card.toughness}};
-            a = {
-                name: entries[i].card.name,
-                cmc: entries[i].card.cmc,
-                colors: entries[i].card.colors,
-                types: entries[i].card.types,
-                subtypes: entries[i].card.subtypes,
-                power: pwr(),
-                toughness: tgh(),
-                imageUrl: entries[i].card.imageUrl,
-                cid: entries[i].card.cid
-            };
-
-            list.push({card: a, amount: entries[i].amount});
-        }
         console.log('list', list);
         const location = window.location.pathname.split('/');
 
