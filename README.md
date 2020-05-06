@@ -18,7 +18,7 @@ JWT_A_S= (your secret)
 ```
 npm start
 ```
-or 
-```
-npm run dev
-```
+
+## To note
+
+to run this locally, you want to download the localBranch version, as pBranch version has different urls for jelastic.
