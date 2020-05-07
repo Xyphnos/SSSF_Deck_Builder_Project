@@ -46,6 +46,7 @@ const getEntries = async (list, loader) =>{
         for(let i = 0; i < list.length; i++) {
             const response = await fetch(apiURLe + '?id=' + JSON.stringify(list[i]));
             const json = await response.json();
+            console.log('jsonjsonjsonjson', json);
             sendList.push({card: json[0], amount: list[i].amount});
         }
         loader.classList.remove('fadeIn');

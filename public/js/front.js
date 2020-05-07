@@ -37,7 +37,11 @@ const getEvery = async () =>{
         }
         //create elements for the decks on the home page
         for( let i = 0; i < limit; i++) {
-            ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
+            let str = json[i].cover;
+            if(json[i].cover !== null) {
+                str = str.replace('http', 'https');
+            }
+            ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${str}></a></li>`;
         }
         loader.classList.toggle('fadeOut');
     }catch(e){

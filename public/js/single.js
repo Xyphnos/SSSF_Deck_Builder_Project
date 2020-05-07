@@ -68,9 +68,13 @@ const getCards = async () =>{
     try{
         const json = await check.deck.cards;
         for( let i = 0; i < json.length; i++) {
+            let str = json[i].card.imageUrl;
+            if(json[i].card.imageUrl !== null) {
+                str = str.replace('http', 'https');
+            }
             ul.innerHTML += `<li class="CLBG">
 <a class="CL">${json[i].amount}x ${json[i].card.name}
-<img class="singles" src=${json[i].card.imageUrl}>
+<img class="singles" src=${str}>
 </a>
 </li>`;
         }
@@ -135,8 +139,12 @@ const CMCC = async () =>{
 window.addEventListener('load', async (event) =>{
     const deck = await currentDeck();
     const cmcc = await CMCC();
+    let secure = deck.deck.cover;
+    if(secure !== null) {
+    secure = secure.replace('http', 'https');
+    }
     DeckName.innerText = deck.deck.name;
-    coverImage.src = deck.deck.cover;
+    coverImage.src = secure;
     await getCards();
     colors.innerText = 'Deck colors :' + cmcc.colors;
     cmc.innerText = 'Average mana cost :' + cmcc.cmc;

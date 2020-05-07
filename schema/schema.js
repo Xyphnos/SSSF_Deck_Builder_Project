@@ -243,14 +243,17 @@ const Mutation = new GraphQLObjectType({
                 user: {type: GraphQLID},
             },
             resolve: async (parent, args, {req, res}) => {
+                console.log('asdasdasdasadasdasdasdasdasasdadsadsadsadasdasdassadasda');
                 try {
 
-                    await authController.checkAuth(req, res);
+                    //await authController.checkAuth(req, res);
                     const thisU = await user.findById(args.user);
                     const thisD = await deck.findById(args.id);
                     //this is here to check that only the user that owns the deck can modify it
                     if(thisU.id === thisD.user) {
                         const cards = await Promise.all(args.cards.map(async card1 => {
+                            const str = card1.card.imageUrl.replace('http', 'https');
+                            card1.card.imageUrl = str;
                             const result = await card.find({cid: card1.card.cid});
                             if (result[0] === undefined) {
                                 let newCard = new card(card1.card);
