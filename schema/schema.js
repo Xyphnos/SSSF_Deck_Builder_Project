@@ -252,6 +252,8 @@ const Mutation = new GraphQLObjectType({
                     if(thisU.id === thisD.user) {
                         const cards = await Promise.all(args.cards.map(async card1 => {
                             const result = await card.find({cid: card1.card.cid});
+                            const str = card1.card.imageUrl.replace('http', 'https');
+                            card1.card.imageUrl = str;
                             if (result[0] === undefined) {
                                 let newCard = new card(card1.card);
                                 const res = await newCard.save();

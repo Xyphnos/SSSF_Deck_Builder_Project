@@ -14,7 +14,16 @@ const getAll = async () =>{
         const json = await check.decks;
         console.log(json);
         for( let i = 0; i < json.length; i++) {
-            ul.innerHTML += `<li class="CLBG"><a class="DeckName" href="${single + json[i].id}">${json[i].name}<img src=${json[i].cover}></a></li>`;
+            let str = json[i].cover;
+            if(json[i].cover !== null) {
+                str = str.replace('http', 'https');
+            }
+            ul.innerHTML += `
+<li class="CLBG">
+<a class="DeckName" href="${single + json[i].id}">${json[i].name}
+<img src=${str}>
+</a>
+</li>`;
         }
     }catch(e){
         console.error('getAll error ', e)

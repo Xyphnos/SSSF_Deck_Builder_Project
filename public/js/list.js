@@ -17,8 +17,10 @@
             console.log(json);
             //create the elements for the card images
             for( let i = 0; i < json.length; i++) {
+                let str = json[i].URL;
+                str = str.replace('http', 'https');
                 ul.innerHTML += `<li class="CLBG">
-<a class="CL">${json[i].name}<img class="singles" src=${json[i].URL}></a></li>`;
+<a class="CL">${json[i].name}<img class="singles" src=${str}></a></li>`;
             }
             loader.classList.remove('fadeIn')
 

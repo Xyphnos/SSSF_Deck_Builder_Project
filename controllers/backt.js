@@ -17,6 +17,29 @@ const cards = (list) =>{
     return entries
 };
 
+const cardsE = (list) =>{
+    const entries = [];
+    const dupecheck = [];
+    const le = list.length;
+
+    for(let i = 0; i < le; i++){
+        if(dupecheck.includes(list[i].name) === false && list[i].imageUrl !== undefined) {
+            dupecheck.push(list[i].name);
+            entries.push({
+                name: list[i].name,
+                cmc: list[i].cmc,
+                colors: list[i].colors,
+                types: list[i].types,
+                subtypes: list[i].subtypes,
+                power: list[i].power,
+                toughness: list[i].toughness,
+                imageUrl: list[i].imageUrl,
+                cid: list[i].id,
+            })
+        }
+    }
+    return entries
+};
 
 //function to search cards by name user has provided and return image, name, and id
 const cardSearch = async (req, res) => {
@@ -52,7 +75,7 @@ const entrySearch = async (req, res) => {
 
         const card = await mtg.card.where({ id: id.id});
 
-        res.json(cards(card))
+        res.json(cardsE(card))
     }
     catch (e) {
         console.error('controller error in entry search')
