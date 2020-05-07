@@ -12,7 +12,6 @@ Card searching is done with magithegathering.io API. Frontend of the project is 
 
 To run this locally, you want to clone the localBranch version, as pBranch version has different urls for jelastic.
 
-When using the card searching functions it is suggested you do not make one letter searches. Magic the Gathering has over 22,000 cards, and single letter searches will try to search every card with the said letter in their name.
 
 ### To use
 
