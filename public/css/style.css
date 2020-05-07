@@ -108,7 +108,7 @@ ul {
     animation: loader 2s infinite ease;
 }
 #fetchPrompt{
-    display: inline-list-item;
+    display: inline-block;
     opacity: 60%;
 }
 @keyframes loader {
